@@ -23,6 +23,7 @@ export function reverseString(
   let end = arr.length - 1;
 
   setReversedStr([...arr]);
+
   // Указываем начальное состояние первого и последнего круга
   setCircleStates((prevCircleStates) => {
     const newCircleStates = [...prevCircleStates];
@@ -44,6 +45,14 @@ export function reverseString(
       clearInterval(interval);
       return;
     }
+    // Обновляем состояния кругов
+    setCircleStates((prevCircleStates) => {
+      const newCircleStates = [...prevCircleStates];
+      newCircleStates[start + 1] = newCircleStates[end - 1] =
+        ElementStates.Changing;
+      newCircleStates[start] = newCircleStates[end] = ElementStates.Modified;
+      return newCircleStates;
+    });
 
     // Меняем местами символы
     swap(arr, start, end);
@@ -51,35 +60,11 @@ export function reverseString(
     // Обновляем состояние массива символов
     setReversedStr([...arr]);
 
-    // Обновляем состояния кругов
-    setCircleStates((prevState) => [
-      ...prevState.map((_, index) => updateCircleStates(index, start, end)),
-    ]);
     // Увеличиваем индекс начала и уменьшаем индекс конца
     start++;
     end--;
-  }, 1000);
+  }, 1200);
 }
-
-/**
- *Функция обновления состояния цвета круга
- *
- * @param {number} index индекс текущего элемента
- * @param {number} start индекс элемента справа
- * @param {number} end индекс элемента слева
- */
-const updateCircleStates = (
-  index: number,
-  start: number,
-  end: number
-): ElementStates =>
-  index === start || index === end
-    ? ElementStates.Modified // Измененные символы
-    : index === start + 1 || index === end - 1
-    ? ElementStates.Changing // Символы, которые будут переворачиваться на следующем шаге
-    : index < start + 1 || index > end - 1
-    ? ElementStates.Modified // Измененные символы
-    : ElementStates.Default;
 
 /**
  *Функция меняющая местами символы в массиве
@@ -89,6 +74,5 @@ const updateCircleStates = (
  * @param {number} secondIndex индекс второго элемента
  */
 const swap = (arr: string[], firstIndex: number, secondIndex: number) => {
-
-  [arr[secondIndex], arr[firstIndex]] = [arr[firstIndex],arr[secondIndex]];
+  [arr[secondIndex], arr[firstIndex]] = [arr[firstIndex], arr[secondIndex]];
 };

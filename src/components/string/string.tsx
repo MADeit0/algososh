@@ -20,8 +20,7 @@ export const StringComponent: React.FC = () => {
 
   const handleReverseClick = () => {
     setIsSorting(true);
-    const initialCircleStates = inputValue.split("").map(() => ElementStates.Default);
-    setCircleStates(initialCircleStates)
+    setCircleStates([])
     reverseString(inputValue, setIsSorting, setReversedStr, setCircleStates);
   };
 
