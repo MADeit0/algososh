@@ -10,12 +10,12 @@ import { ElementStates } from "../../types/element-states";
  * @param {React.Dispatch<React.SetStateAction<ElementStates[]>>} setCircleStates функция React хука хранящая массив состояния цвета кругов
  */
 
-export function reverseString(
+export const reverseString = (
   str: string,
   setIsSorting: React.Dispatch<React.SetStateAction<boolean>>,
   setReversedStr: React.Dispatch<React.SetStateAction<string[]>>,
   setCircleStates: React.Dispatch<React.SetStateAction<ElementStates[]>>
-) {
+) => {
   // Преобразуем строку в массив символов
   let arr = str.split("");
   // Инициализируем переменные для индексов начала и конца подстроки
@@ -64,7 +64,7 @@ export function reverseString(
     start++;
     end--;
   }, 1200);
-}
+};
 
 /**
  *Функция меняющая местами символы в массиве
