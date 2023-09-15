@@ -19,8 +19,8 @@ export const FibonacciPage: React.FC = () => {
 
   const handleReverseClick = () => {
     setIsLoader(true);
-    setFibArray([0]);
-    getFibonacci(setFibArray, setIsLoader, inputValue);
+    setFibArray([]);
+    getFibonacci(setFibArray, setIsLoader, inputValue, isLoader);
   };
 
   useEffect(() => {
@@ -28,6 +28,12 @@ export const FibonacciPage: React.FC = () => {
       ? setIsDisabled(false)
       : setIsDisabled(true);
   }, [inputValue]);
+
+  useEffect(() => {
+    return () => {
+      setIsLoader(false);
+    };
+  }, []);
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">

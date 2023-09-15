@@ -5,16 +5,18 @@ import { ElementStates } from "../../types/element-states";
  *
  * @export
  * @param {string} str Входящая строка символов
- * @param {React.Dispatch<React.SetStateAction<boolean>>} setIsSorting функция React хука хронящая флаг выполнения функции сортировки
- * @param {React.Dispatch<React.SetStateAction<string[]>>} setReversedStr функция React хука хранящая массив переворачиваемых символов
- * @param {React.Dispatch<React.SetStateAction<ElementStates[]>>} setCircleStates функция React хука хранящая массив состояния цвета кругов
+ * @param {React.Dispatch<React.SetStateAction<boolean>>} setIsSorting функция React хука указывающий флаг выполнения функции сортировки
+ * @param {React.Dispatch<React.SetStateAction<string[]>>} setReversedStr функция React хука указывающий массив переворачиваемых символов
+ * @param {React.Dispatch<React.SetStateAction<ElementStates[]>>} setCircleStates функция React хука указывающий массив состояния цвета кругов
+ * @param {boolean} isSorting Аргумент хранящий флаг выполнения функции сортировки
  */
 
 export const reverseString = (
   str: string,
   setIsSorting: React.Dispatch<React.SetStateAction<boolean>>,
   setReversedStr: React.Dispatch<React.SetStateAction<string[]>>,
-  setCircleStates: React.Dispatch<React.SetStateAction<ElementStates[]>>
+  setCircleStates: React.Dispatch<React.SetStateAction<ElementStates[]>>,
+  isSorting: boolean
 ) => {
   // Преобразуем строку в массив символов
   let arr = str.split("");
@@ -32,7 +34,7 @@ export const reverseString = (
   });
 
   const interval = setInterval(() => {
-    if (start >= end) {
+    if (start >= end && !isSorting) {
       // Проверяем, если массив имеет нечетную длину
       if (start === end) {
         setCircleStates((prevCircleStates) => {
