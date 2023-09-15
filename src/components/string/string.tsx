@@ -20,20 +20,22 @@ export const StringComponent: React.FC = () => {
   const handleReverseClick = () => {
     setIsSorting(true);
     setCircleStates([]);
-    reverseString(
-      inputValue,
-      setIsSorting,
-      setReversedStr,
-      setCircleStates,
-      isSorting
-    );
   };
 
   useEffect(() => {
+    if (isSorting) {
+      reverseString(
+        inputValue,
+        setIsSorting,
+        setReversedStr,
+        setCircleStates,
+        isSorting
+      );
+    }
     return () => {
       setIsSorting(false);
     };
-  }, []);
+  }, [isSorting,inputValue]);
 
   return (
     <SolutionLayout title="Строка">

@@ -27,7 +27,7 @@ export const getFibonacci = (
 
   const interval = setInterval(() => {
     // Проверяем, достигнут ли заданный предел чисел Фибоначч
-    if (index > n && !isLoader) {
+    if (index > n || !isLoader) {
       setIsLoader(false);
       clearInterval(interval);
       return;

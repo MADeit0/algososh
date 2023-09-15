@@ -34,7 +34,7 @@ export const reverseString = (
   });
 
   const interval = setInterval(() => {
-    if (start >= end && !isSorting) {
+    if (start >= end || !isSorting) {
       // Проверяем, если массив имеет нечетную длину
       if (start === end) {
         setCircleStates((prevCircleStates) => {
@@ -65,7 +65,7 @@ export const reverseString = (
     // Увеличиваем индекс начала и уменьшаем индекс конца
     start++;
     end--;
-  }, 1200);
+  }, 1000);
 };
 
 /**
