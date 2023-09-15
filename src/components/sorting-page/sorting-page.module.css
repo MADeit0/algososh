@@ -1,0 +1,42 @@
+.form {
+  display: flex;
+justify-content: center;
+align-items: center;
+  /* gap: 12px; */
+}
+
+.button_sorting {
+  grid-area: buttonSort;
+  white-space: nowrap;
+}
+
+.button {
+  grid-area: button;
+  white-space: nowrap;
+}
+
+.container {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(10, min-content);
+  gap: 50px 10px;
+  box-sizing: border-box;
+  padding: 10px 10px;
+}
+
+.text_red {
+  background-color: red;
+}
+
+.circle {
+  animation: circleAnimation 0.5s ease-in-out;
+}
+
+@keyframes circleAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
