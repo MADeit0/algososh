@@ -1,4 +1,5 @@
 import { ElementStates } from "../../types/element-states";
+import { swap } from "../utils/utils";
 
 /**
  *Алгоритм разворота строки
@@ -66,15 +67,4 @@ export const reverseString = (
     start++;
     end--;
   }, 1000);
-};
-
-/**
- *Функция меняющая местами символы в массиве
- *
- * @param {string[]} arr массив символов
- * @param {number} firstIndex индекс первого елемента
- * @param {number} secondIndex индекс второго элемента
- */
-const swap = (arr: string[], firstIndex: number, secondIndex: number) => {
-  [arr[secondIndex], arr[firstIndex]] = [arr[firstIndex], arr[secondIndex]];
 };

@@ -1,44 +1,82 @@
 import styles from "./sorting-page.module.css";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { SortMethods } from "../../types/sorting-types";
 import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
-import { randomArr } from "./utils";
+import { randomArr, selectionSort } from "./utils";
+import { ElementStates } from "../../types/element-states";
 
 export const SortingPage: React.FC = () => {
+  const isSorting = useRef<boolean>(false);
   const [sortMethod, setSortMethod] = useState<SortMethods>(
     SortMethods.Selection
   );
   const [array, setArray] = useState<number[]>([]);
-  const [isSortingAscending, setIsSortingAscending] = useState(false);
-  const [isSortingDescending, setIsSortingDescending] = useState(false);
-
-  const handleSortingAscending = () => {
-    console.log("handleSortingAscending");
-    setIsSortingAscending(true);
-    sorting();
+  const [columnState, setColumnState] = useState<ElementStates[]>([]);
+  const [isSortingAscending, setIsSortingAscending] = useState<boolean>(false);
+  const [isSortingDescending, setIsSortingDescending] = useState<boolean>(
+    false
+  );
+  /**
+   *Функция остановки сортировки
+   *
+   */
+  const stopSorting = () => {
+    setColumnState([]);
+    isSorting.current = false;
   };
-  const handleSortingDescending = () => {
-    console.log("handleSortingDescending");
-    setIsSortingDescending(true);
-    sorting();
-  };
-
+  /**
+   *Функция генерции массива колонок
+   *
+   */
   const handleGeneratingArray = () => {
     const newArr = randomArr(17, 3);
-    console.log(newArr);
+    setColumnState([]);
     setArray([...newArr]);
   };
 
-  const sorting = () => {
+  /**
+   *Функция устанавлявающая состояния для сортировки по возрастанию
+   *
+   */
+  const handleSortingAscending = async () => {
+    console.log("handleSortingAscending");
+    setIsSortingDescending(false);
+    setIsSortingAscending(true);
+    await sorting(false);
+    setIsSortingAscending(false);
+  };
+
+  /**
+   *Функция устанавлявающая состояния для сортировки по убыванию
+   *
+   */
+  const handleSortingDescending = async () => {
+    console.log("handleSortingDescending");
+    setIsSortingAscending(false);
+    setIsSortingDescending(true);
+    await sorting(true);
+    setIsSortingDescending(false);
+  };
+
+  /**
+   *Функция запускающая сортировку по выбору или пузырьком
+   *
+   * @param {boolean} reverse Флаг установки сортировки по возрастанию или убыванию
+   */
+  const sorting = async (reverse: boolean) => {
+    isSorting.current = true;
+
     if (sortMethod === SortMethods.Selection) {
       console.log("selection");
+      await selectionSort(array, setArray, setColumnState, isSorting, reverse);
     } else {
       console.log("booble");
     }
+    isSorting.current = false;
   };
 
   useEffect(() => {
@@ -72,6 +110,7 @@ export const SortingPage: React.FC = () => {
           sorting={Direction.Ascending}
           onClick={handleSortingAscending}
           isLoader={isSortingAscending}
+          disabled={isSortingDescending}
         />
         <Button
           extraClass={`${styles.button_sorting_descending} mr-40`}
@@ -79,16 +118,17 @@ export const SortingPage: React.FC = () => {
           sorting={Direction.Descending}
           onClick={handleSortingDescending}
           isLoader={isSortingDescending}
+          disabled={isSortingAscending}
         />
         <Button
           extraClass={styles.button}
-          text="Новый массив"
-          onClick={handleGeneratingArray}
+          text={isSorting.current ? "Стоп" : "Новый массив"}
+          onClick={isSorting.current ? stopSorting : handleGeneratingArray}
         />
       </div>
       <div className={styles.container}>
         {array.map((item, index) => {
-          return <Column index={item} key={index} />;
+          return <Column index={item} state={columnState[index]} key={index} />;
         })}
       </div>
     </SolutionLayout>
