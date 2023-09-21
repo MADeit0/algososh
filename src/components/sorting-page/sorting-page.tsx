@@ -8,6 +8,7 @@ import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
 import { randomArr, selectionSort } from "./utils";
 import { ElementStates } from "../../types/element-states";
+import { bubbleSort } from "./bubbleSort";
 
 export const SortingPage: React.FC = () => {
   const isSorting = useRef<boolean>(false);
@@ -43,7 +44,6 @@ export const SortingPage: React.FC = () => {
    *
    */
   const handleSortingAscending = async () => {
-    console.log("handleSortingAscending");
     setIsSortingDescending(false);
     setIsSortingAscending(true);
     await sorting(false);
@@ -55,7 +55,6 @@ export const SortingPage: React.FC = () => {
    *
    */
   const handleSortingDescending = async () => {
-    console.log("handleSortingDescending");
     setIsSortingAscending(false);
     setIsSortingDescending(true);
     await sorting(true);
@@ -71,16 +70,23 @@ export const SortingPage: React.FC = () => {
     isSorting.current = true;
 
     if (sortMethod === SortMethods.Selection) {
-      console.log("selection");
+      // Сортировка выбором
       await selectionSort(array, setArray, setColumnState, isSorting, reverse);
     } else {
-      console.log("booble");
+      // Иначе сортировка пузырьком
+      await bubbleSort(array, setArray, setColumnState, isSorting, reverse);
     }
     isSorting.current = false;
   };
 
   useEffect(() => {
     handleGeneratingArray();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      isSorting.current = false;
+    };
   }, []);
 
   return (

@@ -35,7 +35,7 @@ export const StringComponent: React.FC = () => {
     return () => {
       setIsSorting(false);
     };
-  }, [isSorting,inputValue]);
+  }, [isSorting, inputValue]);
 
   return (
     <SolutionLayout title="Строка">
