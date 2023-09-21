@@ -6,9 +6,10 @@ import { RadioInput } from "../ui/radio-input/radio-input";
 import { SortMethods } from "../../types/sorting-types";
 import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
-import { randomArr, selectionSort } from "./utils";
+import { randomArr } from "./service/service";
 import { ElementStates } from "../../types/element-states";
-import { bubbleSort } from "./bubbleSort";
+import { selectionSort } from "./service/selectionSort";
+import { bubbleSort } from "./service/bubbleSort";
 
 export const SortingPage: React.FC = () => {
   const isSorting = useRef<boolean>(false);

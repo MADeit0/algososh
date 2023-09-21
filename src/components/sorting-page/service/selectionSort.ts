@@ -1,8 +1,8 @@
-import { ElementStates } from "../../types/element-states";
-import { delay, swap } from "../utils/utils";
+import { ElementStates } from "../../../types/element-states";
+import { delay, swap } from "../../utils/utils";
 
 /**
- *Алгоритм Сортировки пузырьком c пошаговой визуализацией процесса
+ *Алгоритм Сортировки выбором c пошаговой визуализацией процесса
  *
  * @param {number[]} arr Массив с числами
  * @param {React.Dispatch<React.SetStateAction<number[]>>} setArray Функция обновления состояния массива с числами
@@ -11,7 +11,7 @@ import { delay, swap } from "../utils/utils";
  * @param {boolean} [reverseSort=false] Флаг для установки сортировки по возрастанию или по убыванию
  * @return {*}
  */
-export const bubbleSort = async (
+export const selectionSort = async (
   arr: number[],
   setArray: React.Dispatch<React.SetStateAction<number[]>>,
   setColumnState: React.Dispatch<React.SetStateAction<ElementStates[]>>,
@@ -20,45 +20,51 @@ export const bubbleSort = async (
 ): Promise<void> => {
   const { Changing, Modified, Default } = ElementStates;
   const newArray = [...arr];
+  setColumnState([]);
 
-  for (let i = 0; i < newArray.length - 1; i++) {
+  for (let i = 0; i < newArray.length; i++) {
     if (!isSorting.current) return;
 
-    const step = newArray.length - i - 1;
-    for (let j = 0; j < newArray.length - i - 1; j++) {
+    let maxInd = i;
+
+    setColumnState((prevColumnStates: any) =>
+      updateColumnState(prevColumnStates, maxInd, Changing)
+    );
+    await delay(300);
+
+    for (let j = i + 1; j < newArray.length; j++) {
       if (!isSorting.current) return;
 
-      const sortingChanged = reverseSort
-        ? newArray[j] < newArray[j + 1]
-        : newArray[j] > newArray[j + 1];
-
-      if (sortingChanged) {
-        swap(newArray, j, j + 1);
-        setArray([...newArray]);
-      }
       setColumnState((prevColumnStates: any) =>
         updateColumnState(prevColumnStates, j, Changing)
       );
       await delay(300);
+
       setColumnState((prevColumnStates: any) =>
         updateColumnState(prevColumnStates, j, Default)
       );
+
+      const sortingChanged = reverseSort
+        ? newArray[j] > newArray[maxInd]
+        : newArray[j] < newArray[maxInd];
+
+      if (sortingChanged) {
+        maxInd = j;
+      }
     }
-    setColumnState((prevColumnStates: any) =>
-      updateColumnState(prevColumnStates, step, Modified)
+
+    swap(newArray, i, maxInd);
+    setArray([...newArray]);
+
+    setColumnState((prevColumnStates) =>
+      updateColumnState(prevColumnStates, i, Modified)
     );
     await delay(300);
-
-    if (step === 1) {
-      setColumnState((prevColumnStates: any) =>
-        updateColumnState(prevColumnStates, 0, Modified)
-      );
-    }
   }
 };
 
 /**
- *Функция обновления состояния цвета элементов у массива
+ *Функция обновления состояния цвета элемента у массива
  *
  * @param {ElementStates[]} prevColumnStates Текущий массив
  * @param {number} index индекс элемента
@@ -69,13 +75,8 @@ const updateColumnState = (
   prevColumnStates: ElementStates[],
   index: number,
   state: ElementStates
-): any => {
+) => {
   const newColumnStates = [...prevColumnStates];
   newColumnStates[index] = state;
-
-  if (state !== ElementStates.Modified) {
-    newColumnStates[index + 1] = state;
-  }
-
   return newColumnStates;
 };
