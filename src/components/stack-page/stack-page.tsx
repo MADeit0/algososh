@@ -1,5 +1,5 @@
 import styles from "./stack-page.module.css";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -12,9 +12,11 @@ import { ElementStates } from "../../types/element-states";
 const stack = new Stack<string>();
 
 export const StackPage: React.FC = () => {
-  const [stackState, setStackState] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
+  const [stackState, setStackState] = useState<string[]>([]);
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
+  const [stackSize, setStackSize] = useState<number>(0);
+  const [btnDisable, setBtnDisable] = useState<boolean>(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const targetValue = e.target.value;
@@ -27,8 +29,9 @@ export const StackPage: React.FC = () => {
    */
   const handleAddItem = async () => {
     stack.push(inputValue);
-    const item = stack.peek();
+    setStackSize(stack.size());
 
+    const item = stack.peek();
     if (item) {
       setCircleState((prev) => [...prev, ElementStates.Changing]);
       setStackState((prev) => [...prev, item]);
@@ -46,6 +49,7 @@ export const StackPage: React.FC = () => {
     updateCircleColor(ElementStates.Changing);
     await delay(500);
     stack.pop();
+    setStackSize(stack.size());
     setStackState(stack.toArray());
 
     setCircleState((prev) => {
@@ -61,6 +65,8 @@ export const StackPage: React.FC = () => {
    */
   const handleClearArray = () => {
     stack.clear();
+    setStackSize(stack.size());
+    setBtnDisable(false);
     setStackState(stack.toArray());
     setCircleState([]);
   };
@@ -77,6 +83,14 @@ export const StackPage: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    if (stackSize < 10) {
+      setBtnDisable(false);
+    } else {
+      setBtnDisable(true);
+    }
+  }, [stackSize]);
+
   return (
     <SolutionLayout title="Стек">
       <div className={styles.form}>
@@ -89,7 +103,7 @@ export const StackPage: React.FC = () => {
         />
         <Button
           text="Добавить"
-          disabled={!inputValue}
+          disabled={!inputValue || btnDisable}
           onClick={handleAddItem}
         />
         <Button
