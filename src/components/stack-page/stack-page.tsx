@@ -1,5 +1,5 @@
-import styles from "./stack-page.module.css";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import styles from "../../styles/data-structure.module.css";
+import React, { useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -7,21 +7,17 @@ import { Circle } from "../ui/circle/circle";
 import { Stack } from "./Stack";
 import { delay } from "../utils/utils";
 import { ElementStates } from "../../types/element-states";
+import useInput from "../../hooks/useInput";
 
 //Инстанс класса имитирующий структуру стека
 const stack = new Stack<string>();
 
 export const StackPage: React.FC = () => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue, handleInputChange] = useInput("");
   const [stackState, setStackState] = useState<string[]>([]);
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
   const [stackSize, setStackSize] = useState<number>(0);
   const [btnDisable, setBtnDisable] = useState<boolean>(false);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const targetValue = e.target.value;
-    setInputValue(targetValue);
-  };
 
   /**
    *Функция добавления последнего элемента в стек
@@ -35,9 +31,9 @@ export const StackPage: React.FC = () => {
     if (item) {
       setCircleState((prev) => [...prev, ElementStates.Changing]);
       setStackState((prev) => [...prev, item]);
+      setInputValue("");
       await delay(500);
       updateCircleColor(ElementStates.Default);
-      setInputValue("");
     }
   };
 
