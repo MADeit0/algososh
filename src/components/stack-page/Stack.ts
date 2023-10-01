@@ -24,6 +24,9 @@ export class Stack<typeItem extends string | number>
    * Удаление верхнего элемента из стека
    */
   pop() {
+    if (this._isEmpty()) {
+      return;
+    }
     this._arr.pop();
   }
 
@@ -59,5 +62,9 @@ export class Stack<typeItem extends string | number>
    */
   size() {
     return this._arr.length - 1;
+  }
+
+  _isEmpty() {
+    return this._arr.length === 0;
   }
 }
