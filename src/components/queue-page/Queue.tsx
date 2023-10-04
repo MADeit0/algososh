@@ -2,48 +2,96 @@ interface IQueue<T> {
   enqueue: (item: T) => void;
   dequeue: () => void;
   peak: () => T | null;
+  isEmpty: () => void;
+  getArray: () => (T | null)[];
+  clear: () => void;
 }
 
-class Queue<T> {
-  private _arr: T[] = [];
+export class Queue<T> implements IQueue<T> {
+  private _arr: (T | null)[] = [];
+  public readonly size: number = 0;
 
-  // Добавить элемент в конец очереди
-  enqueue(item: T) {
-    this._arr.push(item);
+  public head = 0;
+  public tail = 0;
+
+  private _length = 0;
+  private _step = 0;
+
+  constructor(size: number) {
+    this._arr = new Array(size);
+    this.size = size;
   }
 
-  // Удалить элемент из начала очереди
-  dequeue() {
-    if (this._isEmpty()) {
-      return;
+  /**
+   * Добавление элемента в конец очереди
+   *
+   * @param {T} item элемент добавляемый в массив
+   * @memberof Queue
+   */
+  enqueue(item: T) {
+    if (this.tail < this.size - 1 && item) {
+      this.tail = this._step;
+      this._arr[this.tail] = item;
+      this._step++;
+      this._length++;
     }
-    this._arr.shift();
+  }
+
+  /**
+   * Удаление элемента из начала очереди
+   *
+   * @memberof Queue
+   */
+  dequeue() {
+
+    if (this.head < this.size - 1 && !this.isEmpty()) {
+      this._arr[this.head] = null;
+      this.head++;
+      this._length--;
+      console.log(this._length);
+    } else {
+      this._arr[this.head] = null;
+      this._length = 0;
+      console.log(this._length);
+    }
   }
 
   /**
    * Получение первого не пустого элемента очереди
    *
-   * @returns Первый элемент очереди или undefined, если массив очереди пуст
+   * @return {*}  {((T | null)[])}
+   * @memberof Queue
    */
-  peek(): T | undefined {
-    for (let i = 0; i < this.size(); i++) {
-      if (!!this._arr[i]) {
-        return this._arr[i];
-      }
-    }
+  peak(): T | null {
+    return this.isEmpty() ? null : this._arr[this.head];
   }
 
   /**
-   * Возвращает количество элементов в очереди
+   * Проверка, является ли массив пустым.
    *
-   * @returns Количество элементов в очереди
+   * @memberof Queue
    */
-  size() {
-    return this._arr.length - 1;
+  isEmpty = () => this._length === 0;
+
+  /**
+   * Получение массива очереди
+   *
+   * @return {*}  {((T | null)[])}
+   * @memberof Queue
+   */
+  getArray(): (T | null)[] {
+    return this._arr;
   }
 
-  // Проверить массив на пустоту
-  _isEmpty() {
-    return this._arr.length === 0;
+  /**
+   * Очищение всех элементов из очереди
+   */
+  clear() {
+    this._arr = new Array(this.size);
+    this.head = 0;
+    this.tail = 0;
+
+    this._length = 0;
+    this._step = 0;
   }
 }

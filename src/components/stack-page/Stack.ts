@@ -9,7 +9,7 @@ interface IStack<typeItem> {
 
 export class Stack<typeItem extends string | number>
   implements IStack<typeItem> {
-  _arr: typeItem[] = [];
+  private _arr: typeItem[] = [];
 
   /**
    * Добавление элемента в стек
