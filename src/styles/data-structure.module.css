@@ -9,15 +9,33 @@
   max-width: 377px;
 }
 
+.input_linkedList {
+  width: 204px;
+}
+
 .button {
   margin-left: 68px;
+}
+
+.button_wrap {
+  white-space: nowrap;
+  flex: auto;
 }
 
 .container {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
   padding: 30px 10px;
+  list-style: none;
+  
+}
+.list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .circle {
