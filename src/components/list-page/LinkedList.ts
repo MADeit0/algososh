@@ -58,13 +58,17 @@ export class LinkedList<T> {
 
   pop() {
     if (this.head !== null) {
-      let current = this.head;
+      if (!this.head.next) {
+        this.head = null;
+      } else {
+        let current = this.head;
 
-      while (!!current.next && !!current.next.next) {
-        current = current.next;
+        while (!!current.next && !!current.next.next) {
+          current = current.next;
+        }
+        current.next = null;
       }
 
-      current.next = null;
       this.size--;
     } else {
       throw new Error("Невозможно удалить элемент из пустого связного списка");
@@ -145,14 +149,3 @@ export class LinkedList<T> {
     return { current, previous };
   }
 }
-
-const list = new LinkedList();
-
-list
-  .append("a")
-  .append("b")
-  .append("c")
-  .append("d")
-  .append("e")
-  .removeElement(3);
-list.ToArray();
