@@ -133,6 +133,12 @@ export class LinkedList<T> {
     return this.size;
   }
 
+  clear() {
+    this.head = null;
+    this.size = 0;
+    return this;
+  }
+
   private _getNodeAtPosition(
     position: number
   ): { current: Node<T> | null; previous: Node<T> | null } {
