@@ -275,17 +275,12 @@ export const ListPage: React.FC = () => {
     );
   };
 
-  const isPosition = (
-    index: number,
-    position: Position
-  ): Position | string | null => {
+  const isPosition = (index: number, position: Position): Position | null => {
     switch (true) {
       case index === 0 && position === Position.HEAD:
         return Position.HEAD;
       case index === list.length - 1 && position === Position.TAIL:
         return Position.TAIL;
-      case position === Position.TAIL:
-        return index.toString();
       default:
         return null;
     }
@@ -387,6 +382,7 @@ export const ListPage: React.FC = () => {
               <Circle
                 letter={item}
                 state={circleState[index]}
+                index={index}
                 head={
                   (events.addEvent &&
                     smileCircleState(Number(countRef.current), index)) ||
