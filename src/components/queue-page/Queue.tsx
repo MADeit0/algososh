@@ -47,11 +47,9 @@ export class Queue<T> implements IQueue<T> {
       this._arr[this.head] = null;
       this.head++;
       this._length--;
-      console.log(this._length);
     } else {
       this._arr[this.head] = null;
       this._length = 0;
-      console.log(this._length);
     }
   }
 
