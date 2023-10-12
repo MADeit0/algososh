@@ -27,7 +27,7 @@ export const selectionSort = async (
 
     let maxInd = i;
 
-    setColumnState((prevColumnStates: any) =>
+    setColumnState((prevColumnStates: ElementStates[]) =>
       updateColumnState(prevColumnStates, maxInd, Changing)
     );
     await delay(300);
@@ -35,12 +35,12 @@ export const selectionSort = async (
     for (let j = i + 1; j < newArray.length; j++) {
       if (!isSorting.current) return;
 
-      setColumnState((prevColumnStates: any) =>
+      setColumnState((prevColumnStates: ElementStates[]) =>
         updateColumnState(prevColumnStates, j, Changing)
       );
       await delay(300);
 
-      setColumnState((prevColumnStates: any) =>
+      setColumnState((prevColumnStates: ElementStates[]) =>
         updateColumnState(prevColumnStates, j, Default)
       );
 
@@ -69,13 +69,13 @@ export const selectionSort = async (
  * @param {ElementStates[]} prevColumnStates Текущий массив
  * @param {number} index индекс элемента
  * @param {ElementStates} state цвет состояния элемента
- * @return {*}
+ * @return {ElementStates[]}
  */
 const updateColumnState = (
   prevColumnStates: ElementStates[],
   index: number,
   state: ElementStates
-) => {
+): ElementStates[] => {
   const newColumnStates = [...prevColumnStates];
   newColumnStates[index] = state;
   return newColumnStates;

@@ -36,21 +36,21 @@ export const bubbleSort = async (
         swap(newArray, j, j + 1);
         setArray([...newArray]);
       }
-      setColumnState((prevColumnStates: any) =>
+      setColumnState((prevColumnStates: ElementStates[]) =>
         updateColumnState(prevColumnStates, j, Changing)
       );
       await delay(300);
-      setColumnState((prevColumnStates: any) =>
+      setColumnState((prevColumnStates: ElementStates[]) =>
         updateColumnState(prevColumnStates, j, Default)
       );
     }
-    setColumnState((prevColumnStates: any) =>
+    setColumnState((prevColumnStates: ElementStates[]) =>
       updateColumnState(prevColumnStates, step, Modified)
     );
     await delay(300);
 
     if (step === 1) {
-      setColumnState((prevColumnStates: any) =>
+      setColumnState((prevColumnStates: ElementStates[]) =>
         updateColumnState(prevColumnStates, 0, Modified)
       );
     }
@@ -63,13 +63,13 @@ export const bubbleSort = async (
  * @param {ElementStates[]} prevColumnStates Текущий массив
  * @param {number} index индекс элемента
  * @param {ElementStates} state цвет состояния элемента
- * @return {*}
+ * @returns {ElementStates[]}
  */
 const updateColumnState = (
   prevColumnStates: ElementStates[],
   index: number,
   state: ElementStates
-): any => {
+): ElementStates[] => {
   const newColumnStates = [...prevColumnStates];
   newColumnStates[index] = state;
 
