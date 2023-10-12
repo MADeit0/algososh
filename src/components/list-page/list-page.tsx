@@ -1,4 +1,4 @@
-import styles from "../../styles/data-structure.module.css";
+import styles from "./list.module.css";
 import React, { useEffect, useRef, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
@@ -319,7 +319,7 @@ export const ListPage: React.FC = () => {
           value={inputValue}
         />
         <Button
-          extraClass={styles.button_wrap}
+          extraClass={styles.button_size_s}
           text="Добавить в head"
           onClick={() => {
             addElementAtHead();
@@ -328,7 +328,7 @@ export const ListPage: React.FC = () => {
           isLoader={events.addElementAtHeadEvent}
         />
         <Button
-          extraClass={styles.button_wrap}
+          extraClass={styles.button_size_s}
           text="Добавить в tail"
           onClick={() => {
             addElementAtTail();
@@ -337,7 +337,7 @@ export const ListPage: React.FC = () => {
           isLoader={events.addElementAtTailEvent}
         />
         <Button
-          extraClass={styles.button_wrap}
+          extraClass={styles.button_size_s}
           text="Удалить из head"
           onClick={() => {
             removeElementAtHead();
@@ -346,7 +346,7 @@ export const ListPage: React.FC = () => {
           isLoader={events.removeElementAtHeadEvent}
         />
         <Button
-          extraClass={styles.button_wrap}
+          extraClass={styles.button_size_s}
           text="Удалить из tail"
           onClick={() => {
             removeElementAtTail();
@@ -364,7 +364,7 @@ export const ListPage: React.FC = () => {
           value={inputIndex}
         />
         <Button
-          extraClass={styles.button_wrap}
+          extraClass={styles.button_size_l}
           text="Добавить по индексу"
           onClick={addElementByIndex}
           disabled={
@@ -373,7 +373,7 @@ export const ListPage: React.FC = () => {
           isLoader={events.addElementByIndexEvent}
         />
         <Button
-          extraClass={styles.button_wrap}
+          extraClass={styles.button_size_l}
           text="Удалить по индексу"
           onClick={removeElementByIndex}
           disabled={!inputIndex || list.length === 0}
@@ -385,7 +385,6 @@ export const ListPage: React.FC = () => {
           return (
             <li className={styles.list} key={index}>
               <Circle
-                extraClass={styles.circle}
                 letter={item}
                 state={circleState[index]}
                 head={

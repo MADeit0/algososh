@@ -1,0 +1,43 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.input {
+  max-width: 377px;
+}
+
+.input_linkedList {
+  width: 204px;
+}
+
+.button_size_s {
+  white-space: nowrap;
+  flex: auto;
+  width: max-content;
+  max-width: 175px;
+}
+
+.button_size_l {
+  composes: button_size_s;
+  max-width: 362px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding-top: 120px;
+  padding-left: 0;
+  list-style: none;
+}
+.list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
