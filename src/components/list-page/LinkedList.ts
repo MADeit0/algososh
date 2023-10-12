@@ -1,3 +1,16 @@
+interface ILinkedList<T> {
+  prepend(element: T): this;
+  append(element: T): this;
+  shift(): this;
+  pop(): void;
+  insertElement(element: T, position: number): this;
+  removeElement(position: number): this;
+  fromArray(arr: Array<T>): this;
+  ToArray(): T[];
+  getSize(): number;
+  clear(): this;
+}
+
 class Node<T> {
   public value: T;
   public next: Node<T> | null;
@@ -7,7 +20,7 @@ class Node<T> {
   }
 }
 
-export class LinkedList<T> {
+export class LinkedList<T> implements ILinkedList<T> {
   private head: Node<T> | null;
   private size: number;
 
@@ -118,7 +131,6 @@ export class LinkedList<T> {
     arr.forEach((item) => this.append(item));
     return this;
   }
-
   ToArray(): T[] {
     let curr = this.head;
     let res: T[] = [];

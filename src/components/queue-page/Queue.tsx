@@ -1,10 +1,10 @@
 interface IQueue<T> {
-  enqueue: (item: T) => void;
-  dequeue: () => void;
-  peak: () => T | null;
-  isEmpty: () => void;
-  getArray: () => (T | null)[];
-  clear: () => void;
+  enqueue(item: T): void;
+  dequeue(): void;
+  peak(): T | null;
+  isEmpty(): boolean;
+  getArray(): (T | null)[];
+  clear(): void;
 }
 
 export class Queue<T> implements IQueue<T> {
@@ -43,7 +43,6 @@ export class Queue<T> implements IQueue<T> {
    * @memberof Queue
    */
   dequeue() {
-
     if (this.head < this.size - 1 && !this.isEmpty()) {
       this._arr[this.head] = null;
       this.head++;
@@ -71,7 +70,9 @@ export class Queue<T> implements IQueue<T> {
    *
    * @memberof Queue
    */
-  isEmpty = () => this._length === 0;
+  isEmpty(): boolean {
+    return this._length === 0;
+  }
 
   /**
    * Получение массива очереди

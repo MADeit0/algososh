@@ -1,22 +1,21 @@
-interface IStack<typeItem> {
-  push: (item: typeItem) => void;
-  pop: () => void;
-  clear: () => void;
-  peek: () => typeItem | undefined;
-  toArray: () => typeItem[] | [];
-  size: () => number;
+interface IStack<T> {
+  push(item: T): void;
+  pop(): void;
+  peek(): T | undefined;
+  clear(): void;
+  toArray(): T[];
+  size(): number;
 }
 
-export class Stack<typeItem extends string | number>
-  implements IStack<typeItem> {
-  private _arr: typeItem[] = [];
+export class Stack<T extends string | number> implements IStack<T> {
+  private _arr: T[] = [];
 
   /**
    * Добавление элемента в стек
    *
    * @param item - Элемент, который нужно добавить в стек
    */
-  push(item: typeItem) {
+  push(item: T) {
     this._arr.push(item);
   }
 
@@ -35,7 +34,7 @@ export class Stack<typeItem extends string | number>
    *
    * @returns Верхний элемент стека или undefined, если стек пуст
    */
-  peek(): typeItem | undefined {
+  peek(): T | undefined {
     return this._arr[this.size()];
   }
 

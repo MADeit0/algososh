@@ -15,6 +15,15 @@ enum Position {
   TAIL = "tail",
 }
 
+interface IModifyLinkedList<T> {
+  prepend(element: T): void;
+  append(element: T): void;
+  shift(): void;
+  pop(): void;
+  insertElement(element: T, position: number): void;
+  removeElement(position: number): void;
+}
+
 const linkedList = new LinkedList<string>();
 
 export const ListPage: React.FC = () => {
@@ -38,7 +47,7 @@ export const ListPage: React.FC = () => {
 
   const performLinkedListOperation = async (
     positionOrIndex: number,
-    operation: (list: LinkedList<string>) => void
+    operation: (list: IModifyLinkedList<string>) => void
   ) => {
     countRef.current = positionOrIndex;
     updateCircleColor(ElementStates.Changing, positionOrIndex);
