@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./string.module.css";
 import { Input } from "../ui/input/input";
@@ -8,6 +8,7 @@ import { reverseString } from "./utils";
 import { ElementStates } from "../../types/element-states";
 
 export const StringComponent: React.FC = () => {
+  const intervalRef = useRef<NodeJS.Timer>(null);
   const [isSorting, setIsSorting] = useState(false);
   const [inputValue, setInputValue] = useState<string>("");
   const [reversedStr, setReversedStr] = useState<string[]>([]);
@@ -29,13 +30,20 @@ export const StringComponent: React.FC = () => {
         setIsSorting,
         setReversedStr,
         setCircleStates,
-        isSorting
+        isSorting,
+        intervalRef
       );
     }
-    return () => {
-      setIsSorting(false);
-    };
   }, [isSorting, inputValue]);
+
+  useEffect(() => {
+    let interval = intervalRef;
+    return () => {
+      if (interval.current) {
+        clearInterval(interval.current);
+      }
+    };
+  }, []);
 
   return (
     <SolutionLayout title="Строка">

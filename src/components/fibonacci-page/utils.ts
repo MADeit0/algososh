@@ -10,7 +10,8 @@ export const getFibonacci = (
   setFibArray: React.Dispatch<React.SetStateAction<number[]>>,
   setIsLoader: React.Dispatch<React.SetStateAction<boolean>>,
   n: number = 0,
-  isLoader: boolean
+  isLoader: boolean,
+  intervalRef: React.MutableRefObject<NodeJS.Timer | null>
 ) => {
   // Проверяем, что n положительное число
   if (n <= 0) {
@@ -25,11 +26,12 @@ export const getFibonacci = (
 
   let index = 0;
 
-  const interval = setInterval(() => {
+  intervalRef.current = setInterval(() => {
+    console.log(isLoader);
     // Проверяем, достигнут ли заданный предел чисел Фибоначч
-    if (index > n || !isLoader) {
+    if (index > n) {
       setIsLoader(false);
-      clearInterval(interval);
+      clearInterval(intervalRef.current as NodeJS.Timer);
       return;
     }
 

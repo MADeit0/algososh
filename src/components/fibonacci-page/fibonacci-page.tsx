@@ -1,5 +1,5 @@
 import styles from "./fibonacci.module.css";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -7,6 +7,7 @@ import { Circle } from "../ui/circle/circle";
 import { getFibonacci } from "./utils";
 
 export const FibonacciPage: React.FC = () => {
+  const intervalRef = useRef<NodeJS.Timer>(null);
   const [isLoader, setIsLoader] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [inputValue, setInputValue] = useState<number>(0);
@@ -30,13 +31,18 @@ export const FibonacciPage: React.FC = () => {
 
   useEffect(() => {
     if (isLoader) {
-      getFibonacci(setFibArray, setIsLoader, inputValue, isLoader);
+      getFibonacci(setFibArray, setIsLoader, inputValue, isLoader, intervalRef);
     }
-
-    return () => {
-      setIsLoader(false);
-    };
   }, [inputValue, isLoader]);
+
+  useEffect(() => {
+    let interval = intervalRef;
+    return () => {
+      if (interval.current) {
+        clearInterval(interval.current);
+      }
+    };
+  }, []);
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
@@ -58,6 +64,7 @@ export const FibonacciPage: React.FC = () => {
           disabled={isDisabled}
         />
       </div>
+
       <div className={styles.container}>
         {fibArray.map((item, index) => {
           return (

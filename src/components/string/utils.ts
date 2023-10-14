@@ -17,7 +17,8 @@ export const reverseString = (
   setIsSorting: React.Dispatch<React.SetStateAction<boolean>>,
   setReversedStr: React.Dispatch<React.SetStateAction<string[]>>,
   setCircleStates: React.Dispatch<React.SetStateAction<ElementStates[]>>,
-  isSorting: boolean
+  isSorting: boolean,
+  intervalRef: React.MutableRefObject<NodeJS.Timer | null>
 ) => {
   // Преобразуем строку в массив символов
   let arr = str.split("");
@@ -34,7 +35,8 @@ export const reverseString = (
     return newCircleStates;
   });
 
-  const interval = setInterval(() => {
+  intervalRef.current = setInterval(() => {
+    console.log(isSorting);
     if (start >= end || !isSorting) {
       // Проверяем, если массив имеет нечетную длину
       if (start === end) {
@@ -45,7 +47,7 @@ export const reverseString = (
         });
       }
       setIsSorting(false);
-      clearInterval(interval);
+      clearInterval(intervalRef.current as NodeJS.Timer);
       return;
     }
     // Обновляем состояния кругов
