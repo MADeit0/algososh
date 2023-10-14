@@ -1,22 +1,18 @@
 import styles from "./fibonacci.module.css";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { getFibonacci } from "./utils";
+import useInputNumber from "../../hooks/useInputNumber";
 
 export const FibonacciPage: React.FC = () => {
   const intervalRef = useRef<NodeJS.Timer>(null);
   const [isLoader, setIsLoader] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [inputValue, setInputValue] = useState<number>(0);
+  const [inputNumber, setInputNumber, handleIndexChange] = useInputNumber(0);
   const [fibArray, setFibArray] = useState<number[]>([]);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const targetValue: number = parseInt(e.target.value, 10);
-    setInputValue(targetValue);
-  };
 
   const handleReverseClick = () => {
     setIsLoader(true);
@@ -24,16 +20,22 @@ export const FibonacciPage: React.FC = () => {
   };
 
   useEffect(() => {
-    inputValue !== 0 && inputValue <= 19
+    inputNumber !== 0 && inputNumber <= 19
       ? setIsDisabled(false)
       : setIsDisabled(true);
-  }, [inputValue]);
+  }, [inputNumber]);
 
   useEffect(() => {
     if (isLoader) {
-      getFibonacci(setFibArray, setIsLoader, inputValue, isLoader, intervalRef);
+      getFibonacci(
+        setFibArray,
+        setIsLoader,
+        inputNumber,
+        isLoader,
+        intervalRef
+      );
     }
-  }, [inputValue, isLoader]);
+  }, [inputNumber, isLoader]);
 
   useEffect(() => {
     let interval = intervalRef;
@@ -53,8 +55,8 @@ export const FibonacciPage: React.FC = () => {
           type={""}
           maxLength={2}
           max={19}
-          onChange={handleInputChange}
-          value={inputValue || 0}
+          onChange={handleIndexChange}
+          value={inputNumber}
         />
         <Button
           onClick={handleReverseClick}

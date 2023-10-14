@@ -36,7 +36,6 @@ export const reverseString = (
   });
 
   intervalRef.current = setInterval(() => {
-    console.log(isSorting);
     if (start >= end || !isSorting) {
       // Проверяем, если массив имеет нечетную длину
       if (start === end) {

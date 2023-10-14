@@ -9,6 +9,7 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { LinkedList } from "./LinkedList";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../utils/utils";
+import useInputNumber from "../../hooks/useInputNumber";
 
 enum Position {
   HEAD = "head",
@@ -29,7 +30,7 @@ const linkedList = new LinkedList<string>();
 export const ListPage: React.FC = () => {
   const [list, setList] = useState<string[]>([]);
   const [inputValue, setInputValue, handleInputChange] = useInput("");
-  const [inputIndex, setInputIndex, handleIndexChange] = useInput("");
+  const [inputIndex, setInputIndex, handleIndexChange] = useInputNumber(0);
 
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
   const [events, setEvents] = useState({
@@ -42,7 +43,10 @@ export const ListPage: React.FC = () => {
     removeElementAtTailEvent: false,
     removeElementByIndexEvent: false,
   });
-  const [btnDisable, setBtnDisable] = useState<boolean>(false);
+  const [startEndBtnDisabled, setStartEndBtnDisabled] = useState<boolean>(
+    false
+  );
+  const [indexBtnDisabled, setIndexBtnDisabled] = useState<boolean>(false);
   const countRef = useRef<number>(0);
 
   const performLinkedListOperation = async (
@@ -64,42 +68,31 @@ export const ListPage: React.FC = () => {
       ...prev,
       addElementByIndexEvent: true,
     }));
+
     try {
       const count = Number(inputIndex);
-      const size = linkedList.getSize() - 1;
-      setInputIndex("");
-      switch (true) {
-        case count === 0:
-          await addElementAtHead(true);
-          break;
-        case count === size:
-          await addElementAtTail(true);
-          break;
-        case count > 0 && count < size:
-          setEvents((prev) => ({
-            ...prev,
-            addEvent: true,
-          }));
-          for (let i = 0; i < count; i++) {
-            countRef.current = i;
-            updateCircleColor(ElementStates.Changing, i);
-            await delay(500);
-          }
-          //
-          await performLinkedListOperation(count, (list) => {
-            list.insertElement(inputValue, count);
-          });
-          setInputValue("");
+      setEvents((prev) => ({
+        ...prev,
+        addEvent: true,
+      }));
 
-          updateCircleColor(ElementStates.Modified, count);
-          await delay(500);
-          setCircleState([]);
-          break;
-        default:
-          throw new Error(`Неверный индекс: ${count}`);
+      for (let i = 0; i < count; i++) {
+        countRef.current = i;
+        updateCircleColor(ElementStates.Changing, i);
+        await delay(500);
       }
+      //
+      await performLinkedListOperation(count, (list) => {
+        list.insertElement(inputValue, count);
+      });
+      setInputIndex(0);
+      setInputValue("");
+
+      updateCircleColor(ElementStates.Modified, count);
+      await delay(500);
+      setCircleState([]);
     } catch (err) {
-      alert(err);
+      console.error(err);
     } finally {
       setEvents((prev) => ({
         ...prev,
@@ -116,34 +109,21 @@ export const ListPage: React.FC = () => {
     }));
     try {
       const count = Number(inputIndex);
-      const size = linkedList.getSize() - 1;
-      setInputIndex("");
-      switch (true) {
-        case count === 0:
-          await removeElementAtHead(true);
-          break;
-        case count === size:
-          await removeElementAtTail(true);
-          break;
-        case count > 0 && count < size:
-          for (let i = 0; i <= count; i++) {
-            updateCircleColor(ElementStates.Changing, i);
-            await delay(500);
-          }
-          setEvents((prev) => ({
-            ...prev,
-            removeEvent: true,
-          }));
-          await performLinkedListOperation(count, (list) => {
-            list.removeElement(count);
-          });
-          setCircleState([]);
-          break;
-        default:
-          throw new Error(`Неверный индекс: ${count}`);
+      for (let i = 0; i <= count; i++) {
+        updateCircleColor(ElementStates.Changing, i);
+        await delay(500);
       }
+      setEvents((prev) => ({
+        ...prev,
+        removeEvent: true,
+      }));
+      await performLinkedListOperation(count, (list) => {
+        list.removeElement(count);
+      });
+      setInputIndex(0);
+      setCircleState([]);
     } catch (err) {
-      alert(err);
+      console.error(err);
     } finally {
       setEvents((prev) => ({
         ...prev,
@@ -297,15 +277,23 @@ export const ListPage: React.FC = () => {
 
   useEffect(() => {
     if (list.length < 6) {
-      setBtnDisable(false);
+      setStartEndBtnDisabled(false);
     } else {
-      setBtnDisable(true);
+      setStartEndBtnDisabled(true);
     }
   }, [list]);
 
+  useEffect(() => {
+    if (inputIndex >= 0 && inputIndex <= list.length - 1) {
+      setIndexBtnDisabled(false);
+    } else {
+      setIndexBtnDisabled(true);
+    }
+  }, [inputIndex, list]);
+
   return (
     <SolutionLayout title="Связный список">
-      <div className={styles.form}>
+      <div className={`${styles.form} pb-6`}>
         <Input
           extraClass={styles.input_linkedList}
           isLimitText={true}
@@ -319,7 +307,7 @@ export const ListPage: React.FC = () => {
           onClick={() => {
             addElementAtHead();
           }}
-          disabled={btnDisable || !inputValue}
+          disabled={startEndBtnDisabled || !inputValue}
           isLoader={events.addElementAtHeadEvent}
         />
         <Button
@@ -328,7 +316,7 @@ export const ListPage: React.FC = () => {
           onClick={() => {
             addElementAtTail();
           }}
-          disabled={btnDisable || !inputValue}
+          disabled={startEndBtnDisabled || !inputValue}
           isLoader={events.addElementAtTailEvent}
         />
         <Button
@@ -362,16 +350,14 @@ export const ListPage: React.FC = () => {
           extraClass={styles.button_size_l}
           text="Добавить по индексу"
           onClick={addElementByIndex}
-          disabled={
-            btnDisable || !inputValue || isNaN(parseInt(inputIndex, 10))
-          }
+          disabled={indexBtnDisabled || !inputValue}
           isLoader={events.addElementByIndexEvent}
         />
         <Button
           extraClass={styles.button_size_l}
           text="Удалить по индексу"
           onClick={removeElementByIndex}
-          disabled={!inputIndex || list.length === 0}
+          disabled={indexBtnDisabled}
           isLoader={events.removeElementByIndexEvent}
         />
       </div>
