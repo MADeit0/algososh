@@ -60,6 +60,7 @@ export const StringComponent: React.FC = () => {
           extraClass={styles.button}
           text="Развернуть"
           isLoader={isSorting}
+          disabled={!inputValue}
         />
       </div>
       <div className={styles.container}>
