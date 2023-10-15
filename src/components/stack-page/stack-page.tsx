@@ -1,5 +1,5 @@
 import styles from "../../styles/data-structure.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -17,12 +17,21 @@ export const StackPage: React.FC = () => {
   const [stackState, setStackState] = useState<string[]>([]);
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
   const [stackSize, setStackSize] = useState<number>(0);
+  const [events, setEvents] = useState({
+    addEvent: false,
+    removeEvent: false,
+    clearEvent: false,
+  });
 
   /**
    *Функция добавления последнего элемента в стек
    *
    */
   const handleAddItem = async () => {
+    setEvents((prev) => ({
+      ...prev,
+      addEvent: true,
+    }));
     stack.push(inputValue);
     setStackSize(stack.size());
 
@@ -34,6 +43,10 @@ export const StackPage: React.FC = () => {
       await delay(500);
       updateCircleColor(ElementStates.Default);
     }
+    setEvents((prev) => ({
+      ...prev,
+      addEvent: false,
+    }));
   };
 
   /**
@@ -41,6 +54,10 @@ export const StackPage: React.FC = () => {
    *
    */
   const handleDeleteItem = async () => {
+    setEvents((prev) => ({
+      ...prev,
+      removeEvent: true,
+    }));
     updateCircleColor(ElementStates.Changing);
     await delay(500);
     stack.pop();
@@ -52,17 +69,35 @@ export const StackPage: React.FC = () => {
       newArray.pop();
       return newArray;
     });
+    setEvents((prev) => ({
+      ...prev,
+      removeEvent: false,
+    }));
   };
 
   /**
    *Функция обнуления массива
    *
    */
-  const handleClearArray = () => {
+  const handleClearArray = async () => {
+    setEvents((prev) => ({
+      ...prev,
+      clearEvent: true,
+    }));
     stack.clear();
+
+    setCircleState((prev) => {
+      const arr = prev.map((item) => (item = ElementStates.Changing));
+      return [...arr];
+    });
+    await delay(500);
     setStackSize(stack.size());
     setStackState(stack.toArray());
     setCircleState([]);
+    setEvents((prev) => ({
+      ...prev,
+      clearEvent: false,
+    }));
   };
 
   /**
@@ -91,17 +126,20 @@ export const StackPage: React.FC = () => {
           text="Добавить"
           disabled={!inputValue || stackSize + 1 >= 10}
           onClick={handleAddItem}
+          isLoader={events.addEvent}
         />
         <Button
           text="Удалить"
           disabled={!stackState?.length}
           onClick={handleDeleteItem}
+          isLoader={events.removeEvent}
         />
         <Button
           extraClass={styles.button}
           text="Очистить"
           disabled={!stackState?.length}
           onClick={handleClearArray}
+          isLoader={events.clearEvent}
         />
       </div>
       <div className={styles.container}>

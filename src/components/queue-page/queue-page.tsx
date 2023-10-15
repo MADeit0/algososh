@@ -15,18 +15,31 @@ export const QueuePage: React.FC = () => {
   const [inputValue, setInputValue, handleInputChange] = useInput<string>("");
   const [queueState, setQueueState] = useState<(string | null)[]>([]);
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
+  const [events, setEvents] = useState({
+    addEvent: false,
+    removeEvent: false,
+    clearEvent: false,
+  });
 
   /**
    * Функция добавления элемента в очередь
    *
    */
   const handleAddItem = async () => {
+    setEvents((prev) => ({
+      ...prev,
+      addEvent: true,
+    }));
     queue.enqueue(inputValue);
     setInputValue("");
     updateCircleColor(ElementStates.Changing, queue.tail);
     await delay(500);
     updateCircleColor(ElementStates.Default, queue.tail);
     setQueueState([...queue.getArray()]);
+    setEvents((prev) => ({
+      ...prev,
+      addEvent: false,
+    }));
   };
 
   /**
@@ -34,18 +47,35 @@ export const QueuePage: React.FC = () => {
    *
    */
   const handleDeleteItem = async () => {
+    setEvents((prev) => ({
+      ...prev,
+      removeEvent: true,
+    }));
     updateCircleColor(ElementStates.Changing, queue.head);
     await delay(500);
     updateCircleColor(ElementStates.Default, queue.head);
     queue.dequeue();
     setQueueState([...queue.getArray()]);
+    setEvents((prev) => ({
+      ...prev,
+      removeEvent: false,
+    }));
   };
 
   /**
    * Функция обнуления массива
    *
    */
-  const clearQueue = () => {
+  const clearQueue = async () => {
+    setCircleState((prev) => {
+      const arr = prev.map((item, index) => {
+        return queueState[index]
+          ? (item = ElementStates.Changing)
+          : (item = ElementStates.Default);
+      });
+      return [...arr];
+    });
+    await delay(500);
     queue.clear();
     setQueueState([...queue.getArray()]);
     setCircleState([]);
@@ -86,17 +116,20 @@ export const QueuePage: React.FC = () => {
           text="Добавить"
           onClick={handleAddItem}
           disabled={!inputValue || queue.tail === queue.size - 1}
+          isLoader={events.addEvent}
         />
         <Button
           text="Удалить"
           onClick={handleDeleteItem}
           disabled={queue.isEmpty()}
+          isLoader={events.removeEvent}
         />
         <Button
           extraClass={styles.button}
           text="Очистить"
           onClick={clearQueue}
           disabled={queue.head === 0 && queue.tail === 0 && queue.isEmpty()}
+          isLoader={events.clearEvent}
         />
       </div>
       <div className={styles.container}>
