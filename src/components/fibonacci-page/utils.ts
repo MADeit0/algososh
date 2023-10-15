@@ -4,17 +4,17 @@
  * @export
  * @param {React.Dispatch<React.SetStateAction<number[]>>} setFibArray Функция React хука для обновления состояния с последовательностью Фибоначчи
  * @param {React.Dispatch<React.SetStateAction<boolean>>} setIsLoader Функция React хука для установки состояния загрузки
- * @param {number} [n=0] Количество чисел в последовательности Фибоначчи
+ * @param {number} [number=0] Количество чисел в последовательности Фибоначчи
+ * @param {React.MutableRefObject<NodeJS.Timer | null>} intervalRef Переменная хука useRef храняящая id интервала
  */
 export const getFibonacci = (
   setFibArray: React.Dispatch<React.SetStateAction<number[]>>,
   setIsLoader: React.Dispatch<React.SetStateAction<boolean>>,
-  n: number = 0,
-  isLoader: boolean,
+  number: number = 0,
   intervalRef: React.MutableRefObject<NodeJS.Timer | null>
 ) => {
   // Проверяем, что n положительное число
-  if (n <= 0) {
+  if (number <= 0) {
     setIsLoader(false);
     return;
   }
@@ -28,7 +28,7 @@ export const getFibonacci = (
 
   intervalRef.current = setInterval(() => {
     // Проверяем, достигнут ли заданный предел чисел Фибоначч
-    if (index > n) {
+    if (index > number) {
       setIsLoader(false);
       clearInterval(intervalRef.current as NodeJS.Timer);
       return;

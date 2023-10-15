@@ -13,11 +13,10 @@ import useInput from "../../hooks/useInput";
 const stack = new Stack<string>();
 
 export const StackPage: React.FC = () => {
-  const [inputValue, setInputValue, handleInputChange] = useInput("");
+  const [inputValue, setInputValue, handleInputChange] = useInput<string>("");
   const [stackState, setStackState] = useState<string[]>([]);
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
   const [stackSize, setStackSize] = useState<number>(0);
-  const [btnDisable, setBtnDisable] = useState<boolean>(false);
 
   /**
    *Функция добавления последнего элемента в стек
@@ -62,7 +61,6 @@ export const StackPage: React.FC = () => {
   const handleClearArray = () => {
     stack.clear();
     setStackSize(stack.size());
-    setBtnDisable(false);
     setStackState(stack.toArray());
     setCircleState([]);
   };
@@ -79,14 +77,6 @@ export const StackPage: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (stackSize < 10) {
-      setBtnDisable(false);
-    } else {
-      setBtnDisable(true);
-    }
-  }, [stackSize]);
-
   return (
     <SolutionLayout title="Стек">
       <div className={styles.form}>
@@ -99,7 +89,7 @@ export const StackPage: React.FC = () => {
         />
         <Button
           text="Добавить"
-          disabled={!inputValue || btnDisable}
+          disabled={!inputValue || stackSize + 1 >= 10}
           onClick={handleAddItem}
         />
         <Button

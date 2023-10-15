@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./string.module.css";
 import { Input } from "../ui/input/input";
@@ -6,17 +6,14 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { reverseString } from "./utils";
 import { ElementStates } from "../../types/element-states";
+import useInput from "../../hooks/useInput";
 
 export const StringComponent: React.FC = () => {
   const intervalRef = useRef<NodeJS.Timer>(null);
   const [isSorting, setIsSorting] = useState(false);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue, handleInputChange] = useInput<string>("");
   const [reversedStr, setReversedStr] = useState<string[]>([]);
   const [circleStates, setCircleStates] = useState<ElementStates[]>([]);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
 
   const handleReverseClick = () => {
     setIsSorting(true);
@@ -30,11 +27,11 @@ export const StringComponent: React.FC = () => {
         setIsSorting,
         setReversedStr,
         setCircleStates,
-        isSorting,
         intervalRef
       );
     }
-  }, [isSorting, inputValue]);
+    //eslint-disable-next-line
+  }, [isSorting]);
 
   useEffect(() => {
     let interval = intervalRef;

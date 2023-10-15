@@ -9,7 +9,6 @@ import { swap } from "../utils/utils";
  * @param {React.Dispatch<React.SetStateAction<boolean>>} setIsSorting функция React хука указывающий флаг выполнения функции сортировки
  * @param {React.Dispatch<React.SetStateAction<string[]>>} setReversedStr функция React хука указывающий массив переворачиваемых символов
  * @param {React.Dispatch<React.SetStateAction<ElementStates[]>>} setCircleStates функция React хука указывающий массив состояния цвета кругов
- * @param {boolean} isSorting Аргумент хранящий флаг выполнения функции сортировки
  */
 
 export const reverseString = (
@@ -17,7 +16,6 @@ export const reverseString = (
   setIsSorting: React.Dispatch<React.SetStateAction<boolean>>,
   setReversedStr: React.Dispatch<React.SetStateAction<string[]>>,
   setCircleStates: React.Dispatch<React.SetStateAction<ElementStates[]>>,
-  isSorting: boolean,
   intervalRef: React.MutableRefObject<NodeJS.Timer | null>
 ) => {
   // Преобразуем строку в массив символов
@@ -36,7 +34,7 @@ export const reverseString = (
   });
 
   intervalRef.current = setInterval(() => {
-    if (start >= end || !isSorting) {
+    if (start >= end) {
       // Проверяем, если массив имеет нечетную длину
       if (start === end) {
         setCircleStates((prevCircleStates) => {

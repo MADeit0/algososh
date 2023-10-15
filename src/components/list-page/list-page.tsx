@@ -9,7 +9,6 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { LinkedList } from "./LinkedList";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../utils/utils";
-import useInputNumber from "../../hooks/useInputNumber";
 
 enum Position {
   HEAD = "head",
@@ -29,8 +28,8 @@ const linkedList = new LinkedList<string>();
 
 export const ListPage: React.FC = () => {
   const [list, setList] = useState<string[]>([]);
-  const [inputValue, setInputValue, handleInputChange] = useInput("");
-  const [inputIndex, setInputIndex, handleIndexChange] = useInputNumber(0);
+  const [inputValue, setInputValue, handleInputChange] = useInput<string>("");
+  const [inputIndex, setInputIndex, handleIndexChange] = useInput<number>(0);
 
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
   const [events, setEvents] = useState({
@@ -46,7 +45,6 @@ export const ListPage: React.FC = () => {
   const [startEndBtnDisabled, setStartEndBtnDisabled] = useState<boolean>(
     false
   );
-  const [indexBtnDisabled, setIndexBtnDisabled] = useState<boolean>(false);
   const countRef = useRef<number>(0);
 
   const performLinkedListOperation = async (
@@ -283,14 +281,6 @@ export const ListPage: React.FC = () => {
     }
   }, [list]);
 
-  useEffect(() => {
-    if (inputIndex >= 0 && inputIndex <= list.length - 1) {
-      setIndexBtnDisabled(false);
-    } else {
-      setIndexBtnDisabled(true);
-    }
-  }, [inputIndex, list]);
-
   return (
     <SolutionLayout title="Связный список">
       <div className={`${styles.form} pb-6`}>
@@ -341,6 +331,10 @@ export const ListPage: React.FC = () => {
       <div className={styles.form}>
         <Input
           extraClass={styles.input_linkedList}
+          type="number"
+          min={0}
+          max={list.length - 1}
+          step={1}
           maxLength={4}
           onChange={handleIndexChange}
           placeholder="Введите индекс"
@@ -350,14 +344,23 @@ export const ListPage: React.FC = () => {
           extraClass={styles.button_size_l}
           text="Добавить по индексу"
           onClick={addElementByIndex}
-          disabled={indexBtnDisabled || !inputValue}
+          disabled={
+            startEndBtnDisabled ||
+            !inputValue ||
+            inputIndex < 0 ||
+            inputIndex > list.length - 1
+          }
           isLoader={events.addElementByIndexEvent}
         />
         <Button
           extraClass={styles.button_size_l}
           text="Удалить по индексу"
           onClick={removeElementByIndex}
-          disabled={indexBtnDisabled}
+          disabled={
+            !inputIndex.toString() ||
+            inputIndex < 0 ||
+            inputIndex > list.length - 1
+          }
           isLoader={events.removeElementByIndexEvent}
         />
       </div>

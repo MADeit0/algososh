@@ -5,13 +5,12 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { getFibonacci } from "./utils";
-import useInputNumber from "../../hooks/useInputNumber";
+import useInput from "../../hooks/useInput";
 
 export const FibonacciPage: React.FC = () => {
   const intervalRef = useRef<NodeJS.Timer>(null);
   const [isLoader, setIsLoader] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [inputNumber, setInputNumber, handleIndexChange] = useInputNumber(0);
+  const [inputNumber, setInputNumber, handleInputChange] = useInput<number>(0);
   const [fibArray, setFibArray] = useState<number[]>([]);
 
   const handleReverseClick = () => {
@@ -20,22 +19,11 @@ export const FibonacciPage: React.FC = () => {
   };
 
   useEffect(() => {
-    inputNumber !== 0 && inputNumber <= 19
-      ? setIsDisabled(false)
-      : setIsDisabled(true);
-  }, [inputNumber]);
-
-  useEffect(() => {
     if (isLoader) {
-      getFibonacci(
-        setFibArray,
-        setIsLoader,
-        inputNumber,
-        isLoader,
-        intervalRef
-      );
+      getFibonacci(setFibArray, setIsLoader, inputNumber, intervalRef);
     }
-  }, [inputNumber, isLoader]);
+    //eslint-disable-next-line
+  }, [isLoader]);
 
   useEffect(() => {
     let interval = intervalRef;
@@ -52,10 +40,12 @@ export const FibonacciPage: React.FC = () => {
         <Input
           extraClass={styles.input}
           isLimitText={true}
-          type={""}
+          type="number"
           maxLength={2}
+          min={1}
           max={19}
-          onChange={handleIndexChange}
+          step={1}
+          onChange={handleInputChange}
           value={inputNumber}
         />
         <Button
@@ -63,7 +53,7 @@ export const FibonacciPage: React.FC = () => {
           extraClass={styles.button}
           text="Развернуть"
           isLoader={isLoader}
-          disabled={isDisabled}
+          disabled={!inputNumber || inputNumber < 0 || inputNumber > 19}
         />
       </div>
 

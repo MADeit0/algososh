@@ -1,5 +1,5 @@
 import styles from "../../styles/data-structure.module.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -12,7 +12,7 @@ import { delay } from "../utils/utils";
 const queue = new Queue<string>(7);
 
 export const QueuePage: React.FC = () => {
-  const [inputValue, setInputValue, handleInputChange] = useInput("");
+  const [inputValue, setInputValue, handleInputChange] = useInput<string>("");
   const [queueState, setQueueState] = useState<(string | null)[]>([]);
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
 
