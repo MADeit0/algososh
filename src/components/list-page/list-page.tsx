@@ -1,5 +1,5 @@
 import styles from "./list.module.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -9,6 +9,8 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { LinkedList } from "./LinkedList";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../utils/utils";
+import { ActionTypes } from "./actions/list-page.action";
+import { reducer } from "./reducers/list-page.reducer";
 
 enum Position {
   HEAD = "head",
@@ -24,6 +26,17 @@ interface IModifyLinkedList<T> {
   removeElement(position: number): void;
 }
 
+const events = {
+  addEvent: false,
+  removeEvent: false,
+  addElementAtHeadEvent: false,
+  addElementAtTailEvent: false,
+  addElementByIndexEvent: false,
+  removeElementAtHeadEvent: false,
+  removeElementAtTailEvent: false,
+  removeElementByIndexEvent: false,
+};
+
 const linkedList = new LinkedList<string>();
 
 export const ListPage: React.FC = () => {
@@ -32,16 +45,8 @@ export const ListPage: React.FC = () => {
   const [inputIndex, setInputIndex, handleIndexChange] = useInput<number>(0);
 
   const [circleState, setCircleState] = useState<ElementStates[]>([]);
-  const [events, setEvents] = useState({
-    addEvent: false,
-    removeEvent: false,
-    addElementAtHeadEvent: false,
-    addElementAtTailEvent: false,
-    addElementByIndexEvent: false,
-    removeElementAtHeadEvent: false,
-    removeElementAtTailEvent: false,
-    removeElementByIndexEvent: false,
-  });
+  const [stateEvents, dispatch] = useReducer(reducer, events);
+
   const [startEndBtnDisabled, setStartEndBtnDisabled] = useState<boolean>(
     false
   );
@@ -62,17 +67,11 @@ export const ListPage: React.FC = () => {
   };
 
   const addElementByIndex = async () => {
-    setEvents((prev) => ({
-      ...prev,
-      addElementByIndexEvent: true,
-    }));
+    dispatch({ type: ActionTypes.ADD_ELEMENT_BY_INDEX_EVENT });
 
     try {
       const count = Number(inputIndex);
-      setEvents((prev) => ({
-        ...prev,
-        addEvent: true,
-      }));
+      dispatch({ type: ActionTypes.ADD_EVENT });
 
       for (let i = 0; i < count; i++) {
         countRef.current = i;
@@ -92,29 +91,19 @@ export const ListPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setEvents((prev) => ({
-        ...prev,
-        addEvent: false,
-        addElementByIndexEvent: false,
-      }));
+      dispatch({ type: ActionTypes.RESET_EVENTS });
     }
   };
 
   const removeElementByIndex = async () => {
-    setEvents((prev) => ({
-      ...prev,
-      removeElementByIndexEvent: true,
-    }));
+    dispatch({ type: ActionTypes.REMOVE_ELEMENT_BY_INDEX_EVENT });
     try {
       const count = Number(inputIndex);
       for (let i = 0; i <= count; i++) {
         updateCircleColor(ElementStates.Changing, i);
         await delay(500);
       }
-      setEvents((prev) => ({
-        ...prev,
-        removeEvent: true,
-      }));
+      dispatch({ type: ActionTypes.REMOVE_EVENT });
       await performLinkedListOperation(count, (list) => {
         list.removeElement(count);
       });
@@ -123,21 +112,13 @@ export const ListPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setEvents((prev) => ({
-        ...prev,
-        removeEvent: false,
-        removeElementByIndexEvent: false,
-      }));
+      dispatch({ type: ActionTypes.RESET_EVENTS });
     }
   };
 
-  const addElementAtHead = async (byIndex: boolean = false) => {
-    !byIndex &&
-      setEvents((prev) => ({
-        ...prev,
-        addEvent: true,
-        addElementAtHeadEvent: true,
-      }));
+  const addElementAtHead = async () => {
+    dispatch({ type: ActionTypes.ADD_EVENT });
+    dispatch({ type: ActionTypes.ADD_ELEMENT_AT_HEAD_EVENT });
     try {
       await performLinkedListOperation(0, (list) => {
         list.prepend(inputValue);
@@ -148,22 +129,13 @@ export const ListPage: React.FC = () => {
       await delay(500);
       updateCircleColor(ElementStates.Default, 0);
     } finally {
-      !byIndex &&
-        setEvents((prev) => ({
-          ...prev,
-          addEvent: false,
-          addElementAtHeadEvent: false,
-        }));
+      dispatch({ type: ActionTypes.RESET_EVENTS });
     }
   };
 
-  const addElementAtTail = async (byIndex: boolean = false) => {
-    !byIndex &&
-      setEvents((prev) => ({
-        ...prev,
-        addEvent: true,
-        addElementAtTailEvent: true,
-      }));
+  const addElementAtTail = async () => {
+    dispatch({ type: ActionTypes.ADD_EVENT });
+    dispatch({ type: ActionTypes.ADD_ELEMENT_AT_TAIL_EVENT });
     try {
       const size = linkedList.getSize() - 1;
       await performLinkedListOperation(size, (list) => {
@@ -174,55 +146,32 @@ export const ListPage: React.FC = () => {
       await delay(500);
       updateCircleColor(ElementStates.Default, size + 1);
     } finally {
-      !byIndex &&
-        setEvents((prev) => ({
-          ...prev,
-          addEvent: false,
-          addElementAtTailEvent: false,
-        }));
+      dispatch({ type: ActionTypes.RESET_EVENTS });
     }
   };
 
-  const removeElementAtHead = async (byIndex: boolean = false) => {
-    !byIndex &&
-      setEvents((prev) => ({
-        ...prev,
-        removeEvent: true,
-        removeElementAtHeadEvent: true,
-      }));
+  const removeElementAtHead = async () => {
+    dispatch({ type: ActionTypes.REMOVE_EVENT });
+    dispatch({ type: ActionTypes.REMOVE_ELEMENT_AT_HEAD_EVENT });
     try {
       await performLinkedListOperation(0, (list) => {
         list.shift();
       });
     } finally {
-      !byIndex &&
-        setEvents((prev) => ({
-          ...prev,
-          removeEvent: false,
-          removeElementAtHeadEvent: false,
-        }));
+      dispatch({ type: ActionTypes.RESET_EVENTS });
     }
   };
 
-  const removeElementAtTail = async (byIndex: boolean = false) => {
-    !byIndex &&
-      setEvents((prev) => ({
-        ...prev,
-        removeEvent: true,
-        removeElementAtTailEvent: true,
-      }));
+  const removeElementAtTail = async () => {
+    dispatch({ type: ActionTypes.REMOVE_EVENT });
+    dispatch({ type: ActionTypes.REMOVE_ELEMENT_AT_TAIL_EVENT });
     try {
       const size = linkedList.getSize() - 1;
       await performLinkedListOperation(size, (list) => {
         list.pop();
       });
     } finally {
-      !byIndex &&
-        setEvents((prev) => ({
-          ...prev,
-          removeEvent: false,
-          removeElementAtTailEvent: false,
-        }));
+      dispatch({ type: ActionTypes.RESET_EVENTS });
     }
   };
 
@@ -243,7 +192,7 @@ export const ListPage: React.FC = () => {
     indexValue: number,
     index: number
   ): false | JSX.Element => {
-    const letter = events.removeEvent ? list[index] : inputValue;
+    const letter = stateEvents.removeEvent ? list[index] : inputValue;
 
     return (
       indexValue === index &&
@@ -298,7 +247,7 @@ export const ListPage: React.FC = () => {
             addElementAtHead();
           }}
           disabled={startEndBtnDisabled || !inputValue}
-          isLoader={events.addElementAtHeadEvent}
+          isLoader={stateEvents.addElementAtHeadEvent}
         />
         <Button
           extraClass={styles.button_size_s}
@@ -307,7 +256,7 @@ export const ListPage: React.FC = () => {
             addElementAtTail();
           }}
           disabled={startEndBtnDisabled || !inputValue}
-          isLoader={events.addElementAtTailEvent}
+          isLoader={stateEvents.addElementAtTailEvent}
         />
         <Button
           extraClass={styles.button_size_s}
@@ -316,7 +265,7 @@ export const ListPage: React.FC = () => {
             removeElementAtHead();
           }}
           disabled={list.length === 0}
-          isLoader={events.removeElementAtHeadEvent}
+          isLoader={stateEvents.removeElementAtHeadEvent}
         />
         <Button
           extraClass={styles.button_size_s}
@@ -325,7 +274,7 @@ export const ListPage: React.FC = () => {
             removeElementAtTail();
           }}
           disabled={list.length === 0}
-          isLoader={events.removeElementAtTailEvent}
+          isLoader={stateEvents.removeElementAtTailEvent}
         />
       </div>
       <div className={styles.form}>
@@ -350,7 +299,7 @@ export const ListPage: React.FC = () => {
             inputIndex < 0 ||
             inputIndex > list.length - 1
           }
-          isLoader={events.addElementByIndexEvent}
+          isLoader={stateEvents.addElementByIndexEvent}
         />
         <Button
           extraClass={styles.button_size_l}
@@ -361,7 +310,7 @@ export const ListPage: React.FC = () => {
             inputIndex < 0 ||
             inputIndex > list.length - 1
           }
-          isLoader={events.removeElementByIndexEvent}
+          isLoader={stateEvents.removeElementByIndexEvent}
         />
       </div>
       <ul className={styles.container}>
@@ -373,12 +322,12 @@ export const ListPage: React.FC = () => {
                 state={circleState[index]}
                 index={index}
                 head={
-                  (events.addEvent &&
+                  (stateEvents.addEvent &&
                     smileCircleState(Number(countRef.current), index)) ||
                   isPosition(index, Position.HEAD)
                 }
                 tail={
-                  (events.removeEvent &&
+                  (stateEvents.removeEvent &&
                     smileCircleState(Number(countRef.current), index)) ||
                   isPosition(index, Position.TAIL)
                 }
