@@ -1,0 +1,52 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button_sorting_ascending {
+  grid-area: buttonSort;
+  white-space: nowrap;
+  width: 100%;
+  max-width: 205px;
+}
+
+.button_sorting_descending {
+  composes: button_sorting_ascending;
+  max-width: 186px;
+}
+
+.button {
+  grid-area: button;
+  white-space: nowrap;
+  width: 100%;
+  max-width: 163px;
+}
+
+.container {
+  max-height: 340px;
+  height: 100%;
+  display: grid;
+  justify-content: center;
+  align-items: end;
+  grid-template-columns: repeat(17, min-content);
+  gap: 50px 10px;
+  padding: 10px 10px;
+}
+
+.text_red {
+  background-color: red;
+}
+
+.circle {
+  animation: circleAnimation 0.5s ease-in-out;
+}
+
+@keyframes circleAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
