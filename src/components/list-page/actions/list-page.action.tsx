@@ -20,14 +20,3 @@ export type Action =
   | { type: ActionTypes.REMOVE_ELEMENT_AT_TAIL_EVENT }
   | { type: ActionTypes.REMOVE_ELEMENT_BY_INDEX_EVENT }
   | { type: ActionTypes.RESET_EVENTS };
-
-export type Events<T> = {
-  addEvent: T;
-  removeEvent: T;
-  addElementAtHeadEvent: T;
-  addElementAtTailEvent: T;
-  addElementByIndexEvent: T;
-  removeElementAtHeadEvent: T;
-  removeElementAtTailEvent: T;
-  removeElementByIndexEvent: T;
-};

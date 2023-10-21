@@ -1,6 +1,17 @@
-import { Action, Events } from "../actions/list-page.action";
+import { Action } from "../actions/list-page.action";
 
-export const reducer = (state: Events<boolean>, action: Action) => {
+export const events: { [key: string]: boolean } = {
+  addEvent: false,
+  removeEvent: false,
+  addElementAtHeadEvent: false,
+  addElementAtTailEvent: false,
+  addElementByIndexEvent: false,
+  removeElementAtHeadEvent: false,
+  removeElementAtTailEvent: false,
+  removeElementByIndexEvent: false,
+};
+
+export const reducer = (state: typeof events, action: Action) => {
   switch (action.type) {
     case "ADD_EVENT":
       return { ...state, addEvent: true };

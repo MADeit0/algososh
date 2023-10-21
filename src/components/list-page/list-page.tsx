@@ -10,7 +10,7 @@ import { LinkedList } from "./LinkedList";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../utils/utils";
 import { ActionTypes } from "./actions/list-page.action";
-import { reducer } from "./reducers/list-page.reducer";
+import { events, reducer } from "./reducers/list-page.reducer";
 
 enum Position {
   HEAD = "head",
@@ -25,17 +25,6 @@ interface IModifyLinkedList<T> {
   insertElement(element: T, position: number): void;
   removeElement(position: number): void;
 }
-
-const events = {
-  addEvent: false,
-  removeEvent: false,
-  addElementAtHeadEvent: false,
-  addElementAtTailEvent: false,
-  addElementByIndexEvent: false,
-  removeElementAtHeadEvent: false,
-  removeElementAtTailEvent: false,
-  removeElementByIndexEvent: false,
-};
 
 const linkedList = new LinkedList<string>();
 
