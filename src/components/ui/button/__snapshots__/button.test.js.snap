@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`отрисовка без текста 1`] = `
+exports[`Button отрисовка без текста 1`] = `
 <button
   className="text text_type_button text_color_primary button undefined false "
   type="button"
@@ -11,7 +11,7 @@ exports[`отрисовка без текста 1`] = `
 </button>
 `;
 
-exports[`отрисовка заблокированной кнопки 1`] = `
+exports[`Button отрисовка заблокированной кнопки 1`] = `
 <button
   className="text text_type_button text_color_primary button undefined false "
   disabled={true}
@@ -23,7 +23,7 @@ exports[`отрисовка заблокированной кнопки 1`] = `
 </button>
 `;
 
-exports[`отрисовка кнопки с индикацией загрузки 1`] = `
+exports[`Button отрисовка кнопки с индикацией загрузки 1`] = `
 <button
   className="text text_type_button text_color_primary button undefined loader "
   disabled={true}
@@ -37,7 +37,7 @@ exports[`отрисовка кнопки с индикацией загрузк�
 </button>
 `;
 
-exports[`отрисовка с текстом 1`] = `
+exports[`Button отрисовка с текстом 1`] = `
 <button
   className="text text_type_button text_color_primary button undefined false "
   type="button"
