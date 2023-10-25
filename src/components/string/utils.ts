@@ -9,6 +9,7 @@ import { swap } from "../utils/utils";
  * @param {React.Dispatch<React.SetStateAction<boolean>>} setIsSorting функция React хука указывающий флаг выполнения функции сортировки
  * @param {React.Dispatch<React.SetStateAction<string[]>>} setReversedStr функция React хука указывающий массив переворачиваемых символов
  * @param {React.Dispatch<React.SetStateAction<ElementStates[]>>} setCircleStates функция React хука указывающий массив состояния цвета кругов
+ * @param {React.MutableRefObject<NodeJS.Timer | null>} intervalRef объект хранящий в ключе current идентификатор интервала
  */
 
 export const reverseString = (
@@ -16,7 +17,7 @@ export const reverseString = (
   setIsSorting: React.Dispatch<React.SetStateAction<boolean>>,
   setReversedStr: React.Dispatch<React.SetStateAction<string[]>>,
   setCircleStates: React.Dispatch<React.SetStateAction<ElementStates[]>>,
-  intervalRef: React.MutableRefObject<NodeJS.Timer | null>
+  intervalRef: React.MutableRefObject<NodeJS.Timer | null>,
 ) => {
   // Преобразуем строку в массив символов
   let arr = str.split("");
@@ -61,7 +62,7 @@ export const reverseString = (
 
     // Обновляем состояние массива символов
     setReversedStr([...arr]);
-
+    
     // Увеличиваем индекс начала и уменьшаем индекс конца
     start++;
     end--;
