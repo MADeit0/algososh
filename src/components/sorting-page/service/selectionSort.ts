@@ -22,14 +22,18 @@ export const selectionSort = async (
 ): Promise<void> => {
   const { Changing, Modified, Default } = ElementStates;
   const newArray = [...arr];
-  setColumnState([]);
+
+  if (newArray.length - 1 <= 0) {
+    setArray([...newArray]);
+    return;
+  }
 
   for (let i = 0; i < newArray.length; i++) {
     if (!isSorting.current) return;
 
     let maxInd = i;
 
-    setColumnState((prevColumnStates: ElementStates[]) =>
+    setColumnState((prevColumnStates) =>
       updateColumnState(prevColumnStates, maxInd, Changing)
     );
     time && (await delay(time));
@@ -37,12 +41,12 @@ export const selectionSort = async (
     for (let j = i + 1; j < newArray.length; j++) {
       if (!isSorting.current) return;
 
-      setColumnState((prevColumnStates: ElementStates[]) =>
+      setColumnState((prevColumnStates) =>
         updateColumnState(prevColumnStates, j, Changing)
       );
       time && (await delay(time));
 
-      setColumnState((prevColumnStates: ElementStates[]) =>
+      setColumnState((prevColumnStates) =>
         updateColumnState(prevColumnStates, j, Default)
       );
 

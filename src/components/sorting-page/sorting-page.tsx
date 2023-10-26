@@ -69,6 +69,7 @@ export const SortingPage: React.FC = () => {
    */
   const sorting = async (reverse: boolean) => {
     isSorting.current = true;
+    setColumnState([]);
 
     if (sortMethod === SortMethods.Selection) {
       // Сортировка выбором
