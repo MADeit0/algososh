@@ -72,10 +72,10 @@ export const SortingPage: React.FC = () => {
 
     if (sortMethod === SortMethods.Selection) {
       // Сортировка выбором
-      await selectionSort(array, setArray, setColumnState, isSorting, reverse);
+      await selectionSort(array, setArray, setColumnState, isSorting, reverse, 300);
     } else {
       // Иначе сортировка пузырьком
-      await bubbleSort(array, setArray, setColumnState, isSorting, reverse);
+      await bubbleSort(array, setArray, setColumnState, isSorting, reverse, 300);
     }
     isSorting.current = false;
   };

@@ -9,6 +9,7 @@ import { delay, swap } from "../../utils/utils";
  * @param {React.Dispatch<React.SetStateAction<ElementStates[]>>} setColumnState функция обновления состояния массива с цветами колонок
  * @param {React.MutableRefObject<boolean>} isSorting Флаг для принудительной остановки сортировки
  * @param {boolean} [reverseSort=false] Флаг для установки сортировки по возрастанию или по убыванию
+ * @param {number} time Необязательный аргумент, устанавливает задержку при выполнении анимации
  * @return {*}
  */
 export const bubbleSort = async (
@@ -16,10 +17,16 @@ export const bubbleSort = async (
   setArray: React.Dispatch<React.SetStateAction<number[]>>,
   setColumnState: React.Dispatch<React.SetStateAction<ElementStates[]>>,
   isSorting: React.MutableRefObject<boolean>,
-  reverseSort: boolean = false
+  reverseSort: boolean = false,
+  time: number = 0
 ): Promise<void> => {
   const { Changing, Modified, Default } = ElementStates;
   const newArray = [...arr];
+
+  if (newArray.length - 1 <= 0) {
+    setArray([...newArray]);
+    return;
+  }
 
   for (let i = 0; i < newArray.length - 1; i++) {
     if (!isSorting.current) return;
@@ -36,21 +43,22 @@ export const bubbleSort = async (
         swap(newArray, j, j + 1);
         setArray([...newArray]);
       }
-      setColumnState((prevColumnStates: ElementStates[]) =>
+      setColumnState((prevColumnStates) =>
         updateColumnState(prevColumnStates, j, Changing)
       );
-      await delay(300);
-      setColumnState((prevColumnStates: ElementStates[]) =>
+      time && (await delay(time));
+      setColumnState((prevColumnStates) =>
         updateColumnState(prevColumnStates, j, Default)
       );
     }
-    setColumnState((prevColumnStates: ElementStates[]) =>
+
+    setColumnState((prevColumnStates) =>
       updateColumnState(prevColumnStates, step, Modified)
     );
-    await delay(300);
+    time && (await delay(time));
 
     if (step === 1) {
-      setColumnState((prevColumnStates: ElementStates[]) =>
+      setColumnState((prevColumnStates) =>
         updateColumnState(prevColumnStates, 0, Modified)
       );
     }
