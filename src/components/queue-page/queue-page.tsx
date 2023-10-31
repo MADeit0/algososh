@@ -117,12 +117,14 @@ export const QueuePage: React.FC = () => {
           onClick={handleAddItem}
           disabled={!inputValue || queue.tail === queue.size - 1}
           isLoader={events.addEvent}
+          data-testid="btnAddItem"
         />
         <Button
           text="Удалить"
           onClick={handleDeleteItem}
           disabled={queue.isEmpty()}
           isLoader={events.removeEvent}
+          data-testid="btnDeleteItem"
         />
         <Button
           extraClass={styles.button}
@@ -130,6 +132,7 @@ export const QueuePage: React.FC = () => {
           onClick={clearQueue}
           disabled={queue.head === 0 && queue.tail === 0 && queue.isEmpty()}
           isLoader={events.clearEvent}
+          data-testid="btnClearAll"
         />
       </div>
       <div className={styles.container}>
