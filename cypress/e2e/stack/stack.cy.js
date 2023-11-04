@@ -18,7 +18,7 @@ describe("Тесты для страницы Стек", function () {
 
     cy.get("@btnAddItem").should("be.disabled");
     cy.get("@btnDeleteItem").should("be.disabled");
-    cy.get("@btnAddItem").should("be.disabled");
+    cy.get("@btnClearAll").should("be.disabled");
   });
 
   it("должен добавить элементы 'a, ab, abc' в стек", () => {
