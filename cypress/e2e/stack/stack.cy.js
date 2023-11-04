@@ -21,7 +21,7 @@ describe("Тесты для страницы Стек", function () {
     cy.get("@btnAddItem").should("be.disabled");
   });
 
-  it("должен добавить ээлементы 'a, ab, abc' в стек", () => {
+  it("должен добавить элементы 'a, ab, abc' в стек", () => {
     stack.forEach((item, index) => {
       cy.get("@input").type(item);
       cy.get("@btnAddItem").click();
