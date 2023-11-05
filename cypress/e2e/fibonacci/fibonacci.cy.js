@@ -1,10 +1,14 @@
+/// <reference types="cypress" />
+
+import { dataAttributes, selectors } from "../../constants/constants";
+
 describe("Тесты для страницы чисел Фибоначчи", function () {
   beforeEach(() => {
     cy.visit("/fibonacci");
     cy.contains("Последовательность Фибоначчи");
 
-    cy.get("input[type='number']").as("input");
-    cy.get('[data-testid="btnGetFibonacci"]').as("btnGetFibonacci");
+    cy.get(selectors.input_number).as("input");
+    cy.getBySel(dataAttributes.BTN_GET_FIBONACCI).as("btnGetFibonacci");
   });
 
   it("должен проверить, что если в инпуте пусто, то кнопка разворота недоступна", () => {
@@ -25,7 +29,7 @@ describe("Тесты для страницы чисел Фибоначчи", fun
 
     cy.wait(5000);
 
-    cy.get("[data-testid='circle']")
+    cy.getBySel(dataAttributes.CIRCLE)
       .should("have.length", "10")
       .each(($el, index) => {
         cy.get($el).contains(fibonacci[index]);

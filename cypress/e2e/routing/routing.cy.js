@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe("Роутинг страниц", function () {
   beforeEach(() => {
     cy.visit("/");

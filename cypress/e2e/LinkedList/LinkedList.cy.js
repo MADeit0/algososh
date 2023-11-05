@@ -1,18 +1,28 @@
+/// <reference types="cypress" />
+
+import { dataAttributes, selectors } from "../../constants/constants";
+
 describe("Тесты для страницы связный список", function () {
   beforeEach(() => {
     cy.visit("/list");
     cy.contains("Связный список");
 
-    cy.get("input[type='number']").as("inputIndex");
-    cy.get("input[type='text']").as("inputText");
+    cy.get(selectors.input_number).as("inputIndex");
+    cy.get(selectors.input_text).as("inputText");
 
-    cy.get('[data-testid="btnAddItemToHead"]').as("btnAddItemToHead");
-    cy.get('[data-testid="btnAddItemToTail"]').as("btnAddItemToTail");
-    cy.get('[data-testid="btnAddItemToIndex"]').as("btnAddItemToIndex");
-    cy.get('[data-testid="btnDeleteItemToHead"]').as("btnDeleteItemToHead");
-    cy.get('[data-testid="btnDeleteItemToTail"]').as("btnDeleteItemToTail");
-    cy.get('[data-testid="btnDeleteItemToIndex"]').as("btnDeleteItemToIndex");
-    cy.get("[data-testid='circle']").as("circle");
+    cy.getBySel(dataAttributes.BTN_ADD_ITEM_TO_HEAD).as("btnAddItemToHead");
+    cy.getBySel(dataAttributes.BTN_ADD_ITEM_TO_TAIL).as("btnAddItemToTail");
+    cy.getBySel(dataAttributes.BTN_ADD_ITEM_TO_INDEX).as("btnAddItemToIndex");
+    cy.getBySel(dataAttributes.BTN_DELETE_ITEM_TO_HEAD).as(
+      "btnDeleteItemToHead"
+    );
+    cy.getBySel(dataAttributes.BTN_DELETE_ITEM_TO_TAIL).as(
+      "btnDeleteItemToTail"
+    );
+    cy.getBySel(dataAttributes.BTN_DELETE_ITEM_TO_INDEX).as(
+      "btnDeleteItemToIndex"
+    );
+    cy.getBySel(dataAttributes.CIRCLE).as("circle");
   });
 
   it("должен проверить, что если в инпуте пусто, то все кнопки недоступны, кроме добавления в head и tail", () => {
@@ -69,9 +79,8 @@ describe("Тесты для страницы связный список", funct
       .should("have.length", "5")
       .each(($el, index) => {
         cy.get($el).should("have.text", defaultListArray[index]);
-      })
+      });
   });
-
 
   it("должен удалить элемент из head", () => {
     const defaultListArray = ["1", "2", "3"];
@@ -107,9 +116,6 @@ describe("Тесты для страницы связный список", funct
       .should("have.length", 3)
       .each(($el, index) => {
         cy.get($el).should("have.text", defaultListArray[index]);
-      })
+      });
   });
-
-
-
 });

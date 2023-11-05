@@ -1,12 +1,13 @@
-import { borderColorShape } from "../../constants/constants";
+/// <reference types="cypress" />
 
+import { borderColorShape, dataAttributes, selectors } from "../../constants/constants";
 describe("Тесты для страницы рекурсии", function () {
   beforeEach(() => {
     cy.visit("/recursion");
     cy.contains("Строка");
 
-    cy.get("input[type='text']").as("input");
-    cy.get('[data-testid="btnReverseStr"]').as("BtnReverseStr");
+    cy.get(selectors.input_text).as("input");
+    cy.getBySel(dataAttributes.BTN_REVERSE_STRING).as("BtnReverseStr");
   });
 
   it("должен проверить, что если в инпуте пусто, то кнопка разворота недоступна", () => {
@@ -23,7 +24,7 @@ describe("Тесты для страницы рекурсии", function () {
     cy.get("@input").type("12345");
     cy.get("@BtnReverseStr").click();
 
-    cy.get("[data-testid='circle']").should("have.length", 5).as("circle");
+    cy.getBySel(dataAttributes.CIRCLE).should("have.length", 5).as("circle");
 
     cy.get("@circle").each(($el, index) => {
       cy.get($el).contains("12345"[index]);

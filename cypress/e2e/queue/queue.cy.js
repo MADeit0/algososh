@@ -1,4 +1,6 @@
-import { borderColorShape } from "../../constants/constants";
+/// <reference types="cypress" />
+
+import { borderColorShape, dataAttributes, selectors } from "../../constants/constants";
 
 describe("Тесты для страницы очередь", function () {
   const queue = ["a", "ab", "abc"];
@@ -7,11 +9,11 @@ describe("Тесты для страницы очередь", function () {
     cy.visit("/queue");
     cy.contains("Очередь");
 
-    cy.get("input[type='text']").as("input");
-    cy.get('[data-testid="btnAddItem"]').as("btnAddItem");
-    cy.get('[data-testid="btnDeleteItem"]').as("btnDeleteItem");
-    cy.get('[data-testid="btnClearAll"]').as("btnClearAll");
-    cy.get("[data-testid='circle']").as("circle");
+    cy.get(selectors.input_text).as("input");
+    cy.getBySel(dataAttributes.BTN_ADD_ITEM).as("btnAddItem");
+    cy.getBySel(dataAttributes.BTN_DELETE_ITEM).as("btnDeleteItem");
+    cy.getBySel(dataAttributes.BTN_CLEAR_ALL).as("btnClearAll");
+    cy.getBySel(dataAttributes.CIRCLE).as("circle");
   });
 
   it("должен проверить, что если в инпуте пусто, то все кнопки недоступны", () => {

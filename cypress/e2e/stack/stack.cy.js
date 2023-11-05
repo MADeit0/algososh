@@ -1,4 +1,6 @@
-import { borderColorShape } from "../../constants/constants";
+/// <reference types="cypress" />
+
+import { borderColorShape, dataAttributes, selectors } from "../../constants/constants";
 
 describe("Тесты для страницы Стек", function () {
   const stack = ["a", "ab", "abc"];
@@ -7,10 +9,10 @@ describe("Тесты для страницы Стек", function () {
     cy.visit("/stack");
     cy.contains("Стек");
 
-    cy.get("input[type='text']").as("input");
-    cy.get('[data-testid="btnAddItem"]').as("btnAddItem");
-    cy.get('[data-testid="btnDeleteItem"]').as("btnDeleteItem");
-    cy.get('[data-testid="btnClearAll"]').as("btnClearAll");
+    cy.get(selectors.input_text).as("input");
+    cy.getBySel(dataAttributes.BTN_ADD_ITEM).as("btnAddItem");
+    cy.getBySel(dataAttributes.BTN_DELETE_ITEM).as("btnDeleteItem");
+    cy.getBySel(dataAttributes.BTN_CLEAR_ALL).as("btnClearAll");
   });
 
   it("должен проверить, что если в инпуте пусто, то все кнопки недоступны", () => {
@@ -25,15 +27,15 @@ describe("Тесты для страницы Стек", function () {
     stack.forEach((item, index) => {
       cy.get("@input").type(item);
       cy.get("@btnAddItem").click();
-      cy.get("[data-testid='circle']")
+      cy.getBySel(dataAttributes.CIRCLE)
         .eq(index)
         .should("have.css", "border-color", borderColorShape.CHANGING);
-      cy.get("[data-testid='circle']")
+        cy.getBySel(dataAttributes.CIRCLE)
         .eq(index)
         .should("have.css", "border-color", borderColorShape.DEFAULT);
     });
 
-    cy.get("[data-testid='circle']")
+    cy.getBySel(dataAttributes.CIRCLE)
       .should("have.length", "3")
       .each(($el, index) => {
         cy.get($el).contains(stack[index]);
@@ -41,35 +43,37 @@ describe("Тесты для страницы Стек", function () {
   });
 
   it("должен удалить элементы 'a, ab, abc' из стека", () => {
-    stack.forEach((item, index, arr) => {
+    stack.forEach((item) => {
       cy.get("@input").type(item);
       cy.get("@btnAddItem").click();
     });
 
     cy.get("@btnDeleteItem").click();
-    cy.get("[data-testid='circle']")
+    cy.getBySel(dataAttributes.CIRCLE).as('circle')
+
+    cy.get('@circle')
       .eq(2)
       .should("have.css", "border-color", borderColorShape.CHANGING);
     cy.get("@btnDeleteItem").click();
-    cy.get("[data-testid='circle']")
+    cy.get("@circle")
       .eq(1)
       .should("have.css", "border-color", borderColorShape.CHANGING);
     cy.get("@btnDeleteItem").click();
-    cy.get("[data-testid='circle']")
+    cy.get("@circle")
       .eq(0)
       .should("have.css", "border-color", borderColorShape.CHANGING);
 
-    cy.get("[data-testid='circle']").should("have.length", 0);
+    cy.get("@circle").should("have.length", 0);
   });
 
   it("должен  очистить все элементы в стеке", () => {
-    stack.forEach((item, index, arr) => {
+    stack.forEach((item) => {
       cy.get("@input").type(item);
       cy.get("@btnAddItem").click();
     });
 
     cy.get("@btnClearAll").click();
 
-    cy.get("[data-testid='circle']").should("have.length", 0);
+    cy.getBySel(dataAttributes.CIRCLE).should("have.length", 0);
   });
 });

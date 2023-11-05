@@ -4,7 +4,7 @@ export const borderColorShape = {
   MODIFIED: "rgb(127, 224, 81)",
 };
 
-export const dataSelectors = {
+export const dataAttributes = {
   BTN_REVERSE_STRING: "btnReverseStr",
   BTN_GET_FIBONACCI: "btnGetFibonacci",
   BTN_ADD_ITEM: "btnAddItem",
@@ -17,4 +17,10 @@ export const dataSelectors = {
   BTN_DELETE_ITEM_TO_HEAD: "btnDeleteItemToHead",
   BTN_DELETE_ITEM_TO_TAIL: "btnDeleteItemToTail",
   BTN_DELETE_ITEM_TO_INDEX: "btnDeleteItemToIndex",
+};
+
+export const selectors = {
+  circle_smile: "div[class*=circle_small]",
+  input_number: "input[type='number']",
+  input_text: "input[type='text']",
 };
