@@ -46,7 +46,7 @@ export const FibonacciPage: React.FC = () => {
           max={19}
           step={1}
           onChange={handleInputChange}
-          value={inputNumber}
+          value={inputNumber || ''}
         />
         <Button
           onClick={handleReverseClick}
@@ -54,6 +54,7 @@ export const FibonacciPage: React.FC = () => {
           text="Развернуть"
           isLoader={isLoader}
           disabled={!inputNumber || inputNumber < 0 || inputNumber > 19}
+          data-testid="btnGetFibonacci"
         />
       </div>
 

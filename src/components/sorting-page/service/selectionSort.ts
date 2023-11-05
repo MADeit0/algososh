@@ -9,6 +9,7 @@ import { delay, swap } from "../../utils/utils";
  * @param {React.Dispatch<React.SetStateAction<ElementStates[]>>} setColumnState функция обновления состояния массива с цветами колонок
  * @param {React.MutableRefObject<boolean>} isSorting Флаг для принудительной остановки сортировки
  * @param {boolean} [reverseSort=false] Флаг для установки сортировки по возрастанию или по убыванию
+ * @param {number} time Необязательный аргумент, устанавливает задержку при выполнении анимации
  * @return {*}
  */
 export const selectionSort = async (
@@ -16,31 +17,36 @@ export const selectionSort = async (
   setArray: React.Dispatch<React.SetStateAction<number[]>>,
   setColumnState: React.Dispatch<React.SetStateAction<ElementStates[]>>,
   isSorting: React.MutableRefObject<boolean>,
-  reverseSort: boolean = false
+  reverseSort: boolean = false,
+  time: number = 0
 ): Promise<void> => {
   const { Changing, Modified, Default } = ElementStates;
   const newArray = [...arr];
-  setColumnState([]);
+
+  if (newArray.length - 1 <= 0) {
+    setArray([...newArray]);
+    return;
+  }
 
   for (let i = 0; i < newArray.length; i++) {
     if (!isSorting.current) return;
 
     let maxInd = i;
 
-    setColumnState((prevColumnStates: ElementStates[]) =>
+    setColumnState((prevColumnStates) =>
       updateColumnState(prevColumnStates, maxInd, Changing)
     );
-    await delay(300);
+    time && (await delay(time));
 
     for (let j = i + 1; j < newArray.length; j++) {
       if (!isSorting.current) return;
 
-      setColumnState((prevColumnStates: ElementStates[]) =>
+      setColumnState((prevColumnStates) =>
         updateColumnState(prevColumnStates, j, Changing)
       );
-      await delay(300);
+      time && (await delay(time));
 
-      setColumnState((prevColumnStates: ElementStates[]) =>
+      setColumnState((prevColumnStates) =>
         updateColumnState(prevColumnStates, j, Default)
       );
 
@@ -59,7 +65,7 @@ export const selectionSort = async (
     setColumnState((prevColumnStates) =>
       updateColumnState(prevColumnStates, i, Modified)
     );
-    await delay(300);
+    time && (await delay(time));
   }
 };
 
