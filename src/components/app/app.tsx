@@ -12,7 +12,7 @@ import { StackPage } from "../stack-page/stack-page";
 function App() {
   return (
     <div className={Style.app}>
-      <BrowserRouter>
+      <BrowserRouter basename="/algososh" >
         <Switch>
           <Route path="/" exact>
             <MainPage />

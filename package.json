@@ -1,5 +1,6 @@
 {
   "name": "algorithms-project",
+  "homepage": "https://madeit0.github.io/algososh",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -24,6 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build",
     "cypress:open": "./node_modules/.bin/cypress open"
   },
   "eslintConfig": {
@@ -49,6 +51,7 @@
     "@types/react-test-renderer": "^18.0.5",
     "cypress": "^13.3.3",
     "eslint-plugin-cypress": "^2.15.1",
+    "gh-pages": "^6.1.1",
     "react-test-renderer": "^17.0.2"
   }
 }
