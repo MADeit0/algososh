@@ -127,12 +127,14 @@ export const StackPage: React.FC = () => {
           disabled={!inputValue || stackSize + 1 >= 10}
           onClick={handleAddItem}
           isLoader={events.addEvent}
+          data-testid="btnAddItem"
         />
         <Button
           text="Удалить"
           disabled={!stackState?.length}
           onClick={handleDeleteItem}
           isLoader={events.removeEvent}
+          data-testid="btnDeleteItem"
         />
         <Button
           extraClass={styles.button}
@@ -140,6 +142,7 @@ export const StackPage: React.FC = () => {
           disabled={!stackState?.length}
           onClick={handleClearArray}
           isLoader={events.clearEvent}
+          data-testid="btnClearAll"
         />
       </div>
       <div className={styles.container}>

@@ -237,6 +237,7 @@ export const ListPage: React.FC = () => {
           }}
           disabled={startEndBtnDisabled || !inputValue}
           isLoader={stateEvents.addElementAtHeadEvent}
+          data-testid="btnAddItemToHead"
         />
         <Button
           extraClass={styles.button_size_s}
@@ -246,6 +247,7 @@ export const ListPage: React.FC = () => {
           }}
           disabled={startEndBtnDisabled || !inputValue}
           isLoader={stateEvents.addElementAtTailEvent}
+          data-testid="btnAddItemToTail"
         />
         <Button
           extraClass={styles.button_size_s}
@@ -255,6 +257,7 @@ export const ListPage: React.FC = () => {
           }}
           disabled={list.length === 0}
           isLoader={stateEvents.removeElementAtHeadEvent}
+          data-testid="btnDeleteItemToHead"
         />
         <Button
           extraClass={styles.button_size_s}
@@ -264,6 +267,7 @@ export const ListPage: React.FC = () => {
           }}
           disabled={list.length === 0}
           isLoader={stateEvents.removeElementAtTailEvent}
+          data-testid="btnDeleteItemToTail"
         />
       </div>
       <div className={styles.form}>
@@ -276,7 +280,7 @@ export const ListPage: React.FC = () => {
           maxLength={4}
           onChange={handleIndexChange}
           placeholder="Введите индекс"
-          value={inputIndex}
+          value={inputIndex || ''}
         />
         <Button
           extraClass={styles.button_size_l}
@@ -289,17 +293,19 @@ export const ListPage: React.FC = () => {
             inputIndex > list.length - 1
           }
           isLoader={stateEvents.addElementByIndexEvent}
+          data-testid="btnAddItemToIndex"
         />
         <Button
           extraClass={styles.button_size_l}
           text="Удалить по индексу"
           onClick={removeElementByIndex}
           disabled={
-            !inputIndex.toString() ||
+            !inputIndex||
             inputIndex < 0 ||
             inputIndex > list.length - 1
           }
           isLoader={stateEvents.removeElementByIndexEvent}
+          data-testid="btnDeleteItemToIndex"
         />
       </div>
       <ul className={styles.container}>

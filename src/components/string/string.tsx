@@ -51,6 +51,7 @@ export const StringComponent: React.FC = () => {
           maxLength={11}
           onChange={handleInputChange}
           value={inputValue}
+          data-testid="inputValue"
         />
         <Button
           onClick={handleReverseClick}
@@ -58,6 +59,7 @@ export const StringComponent: React.FC = () => {
           text="Развернуть"
           isLoader={isSorting}
           disabled={!inputValue}
+          data-testid="btnReverseStr"
         />
       </div>
       <div className={styles.container}>
